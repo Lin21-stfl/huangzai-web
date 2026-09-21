@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="黄磜镇旅游攻略 —— 一日采茶线、两日研学线、三日康养线，含交通、花费、最佳季节与避坑提醒，按主题标签与阅读时长筛选。">
+    <meta name="theme-color" content="#3D5A27">
+    <title>全域攻略 · 怎么玩更省心 | 黄磜镇农文旅综合服务平台</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Archivo:wght@600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="assets/css/tokens.css">
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/pages.css">
+    <link rel="stylesheet" href="assets/css/components-extra.css">
+
+    <script>
+        (function () {
+            try {
+                var t = localStorage.getItem('hz-theme');
+                if (!t) { t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; }
+                document.documentElement.setAttribute('data-theme', t);
+            } catch (e) { }
+        })();
+    </script>
+</head>
+
+<body>
+    <a class="skip-link" href="#main">跳到主要内容</a>
+
+    <header class="navbar navbar--solid" id="navbar">
+        <div class="container navbar__inner">
+            <a class="navbar__logo" href="index.html" aria-label="黄磜镇农文旅综合服务平台 · 返回首页">
+                <span class="navbar__mark" aria-hidden="true">磜</span>
+                <span>黄磜镇农文旅</span>
+            </a>
+            <nav class="navbar__links" aria-label="主导航">
+                <a class="navbar__link" href="index.html">首页</a>
+                <a class="navbar__link" href="attractions.html">景点</a>
+                <a class="navbar__link" href="stays.html">住宿</a>
+                <a class="navbar__link" href="experiences.html">体验</a>
+                <a class="navbar__link" href="guides.html" aria-current="page">攻略</a>
+            </nav>
+            <div class="navbar__actions">
+                <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换深色主题">
+                    <svg class="theme-toggle__moon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+                        <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
+                    </svg>
+                    <svg class="theme-toggle__sun" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="4" />
+                        <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+                    </svg>
+                </button>
+                <button class="navbar__toggle" type="button" data-drawer-open="mainDrawer" aria-label="打开导航菜单"
+                    aria-expanded="false" aria-controls="mainDrawer">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+                        <path d="M3 6h18M3 12h18M3 18h18" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="drawer" id="mainDrawer" role="dialog" aria-modal="true" aria-label="导航菜单">
+        <div class="drawer__scrim" data-drawer-close></div>
+        <div class="drawer__panel">
+            <div class="drawer__header">
+                <span class="drawer__title">导航</span>
+                <button class="drawer__close" type="button" data-drawer-close aria-label="关闭菜单">✕</button>
+            </div>
+            <nav class="drawer__nav" aria-label="移动端导航">
+                <a class="drawer__link" href="index.html">首页 <span aria-hidden="true">›</span></a>
+                <a class="drawer__link" href="attractions.html">景点特色 <span aria-hidden="true">›</span></a>
+                <a class="drawer__link" href="stays.html">精选住宿 <span aria-hidden="true">›</span></a>
+                <a class="drawer__link" href="experiences.html">游玩体验 <span aria-hidden="true">›</span></a>
+                <a class="drawer__link" href="guides.html" aria-current="page">全域攻略 <span aria-hidden="true">›</span></a>
+            </nav>
+        </div>
+    </div>
+
+    <main id="main">
+
+        <!-- ==================== PAGE HEADER ==================== -->
+        <header class="page-header page-header--compact">
+            <div class="page-header__media">
+                <img src="assets/img/p37302362.jpg"
+                    alt="黄磜镇山间公路与茶田">
+            </div>
+            <div class="container">
+                <div class="page-header__inner">
+                    <nav class="breadcrumb" aria-label="面包屑导航">
+                        <a href="index.html">首页</a>
+                        <span class="breadcrumb__sep" aria-hidden="true">/</span>
+                        <span aria-current="page">旅游攻略</span>
+                    </nav>
+                    <h1 class="page-header__title">怎么玩更省心</h1>
+                    <p class="page-header__desc">
+                        每篇攻略都写清了交通方式、时间分配、实际花费和容易踩的坑 ——
+                        不用自己拼凑信息，照着走就行。
+                    </p>
+                </div>
+            </div>
+        </header>
+
+        <!-- ==================== 标签云筛选 ==================== -->
+        <div class="filterbar" id="filterbar">
+            <div class="container">
+                <div class="filterbar__row">
+                    <div class="chip-group" data-filter-group="topic" role="group" aria-label="按攻略主题筛选">
+                        <button class="chip is-active" type="button" data-filter-value="all" aria-pressed="true">全部攻略</button>
+                        <button class="chip" type="button" data-filter-value="新手" aria-pressed="false">新手必看</button>
+                        <button class="chip" type="button" data-filter-value="深度" aria-pressed="false">深度游</button>
+                        <button class="chip" type="button" data-filter-value="亲子" aria-pressed="false">亲子游</button>
+                        <button class="chip" type="button" data-filter-value="美食" aria-pressed="false">美食地图</button>
+                        <button class="chip" type="button" data-filter-value="摄影" aria-pressed="false">摄影指南</button>
+                        <button class="chip" type="button" data-filter-value="省钱" aria-pressed="false">省钱攻略</button>
+                        <button class="chip" type="button" data-filter-value="季节" aria-pressed="false">季节限定</button>
+                    </div>
+
+                    <div class="filterbar__meta">
+                        <label class="search-field" style="width:220px">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+                                <circle cx="11" cy="11" r="7" />
+                                <path d="m20 20-3.5-3.5" />
+                            </svg>
+                            <span class="sr-only">搜索攻略</span>
+                            <input type="search" placeholder="搜索攻略标题" data-search-input>
+                        </label>
+                    </div>
+                </div>
+
+                <p class="filter-summary" data-filter-summary role="status" aria-live="polite"></p>
+                <p class="filter-summary"><span>共 <strong data-filter-count>8</strong> 篇攻略</span></p>
+            </div>
+        </div>
+
+        <!-- ==================== 主体：列表 + 侧栏 ==================== -->
+        <section class="section section--tight">
+            <div class="container">
+                <div class="guides-layout">
+
+                    <!-- ---------- 攻略列表 ---------- -->
+                    <div class="stack" data-filter-results>
+
+                        <!-- 置顶：季节专题横幅 -->
+                        <div class="promo-banner" data-reveal>
+                            <div>
+                                <h2 class="promo-banner__title">11 月红叶季 · 提前三周定住宿</h2>
+                                <p class="promo-banner__text">
+                                    岭南红叶世界的观赏窗口通常只有 3 周。这段时间镇上的房间会先满，
+                                    再是民宿。行程定了就先把住的地方锁上，比什么都省心。
+                                </p>
+                            </div>
+                            <div class="promo-banner__actions">
+                                <a class="btn btn--on-image-solid" href="stays.html">看住宿</a>
+                            </div>
+                        </div>
+
+                        <a class="guide-row" href="guide-detail.html" data-filter-item
+                            data-tags="新手,省钱,季节" data-search="第一次去黄磜 一日采茶线 新手指南"
+                            data-reveal>
+                            <div class="guide-row__media">
+                                <img src="assets/img/p6872257.jpg"
+                                    alt="黄磜镇茶田晨雾" loading="lazy">
+                                <span class="guide-row__read-time">8 分钟</span>
+                            </div>
+                            <div class="guide-row__body">
+                                <h2 class="guide-row__title">第一次去黄磜：一日采茶线怎么走</h2>
+                                <p class="guide-row__excerpt">
+                                    早上采茶、中午茶宴、下午逛茶园 —— 把最适合新手的三个环节串成一天。
+                                    含交通方式、每个环节的实际耗时，以及为什么强烈建议自驾。
+                                </p>
+                                <div class="guide-row__author">
+                                    <span class="avatar avatar--sm" aria-hidden="true">镇</span>
+                                    <div>
+                                        <div style="color:var(--text-strong);font-weight:var(--weight-semibold)">黄磜镇文旅办</div>
+                                        <div>2026 年 3 月更新</div>
+                                    </div>
+                                    <div class="guide-row__stats">
+                                        <span class="guide-row__stat">👁 12.4k</span>
+                                        <span class="guide-row__stat">♡ 862</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a class="guide-row" href="guide-detail.html" data-filter-item
+                            data-tags="深度,亲子" data-search="两日红色茶旅研学 县委旧址"
+                            data-reveal>
+                            <div class="guide-row__media">
+                                <img src="assets/img/p33933748.jpg"
+                                    alt="红色研学旧址" loading="lazy">
+                                <span class="guide-row__read-time">11 分钟</span>
+                            </div>
+                            <div class="guide-row__body">
+                                <h2 class="guide-row__title">两日红色茶旅研学：三个旧址加一片茶园</h2>
+                                <p class="guide-row__excerpt">
+                                    专为学校与单位团队写的两日议程。第一天走高群县委旧址与黄沙坑抗日指挥部，
+                                    第二天上午梁坝抗战学校，下午转营盘高山茶园 —— 严肃与放松各占一半。
+                                </p>
+                                <div class="guide-row__author">
+                                    <span class="avatar avatar--sm" aria-hidden="true">研</span>
+                                    <div>
+                                        <div style="color:var(--text-strong);font-weight:var(--weight-semibold)">研学课程组</div>
+                                        <div>2026 年 4 月更新</div>
+                                    </div>
+                                    <div class="guide-row__stats">
+                                        <span class="guide-row__stat">👁 6.8k</span>
+                                        <span class="guide-row__stat">♡ 431</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a class="guide-row" href="guide-detail.html" data-filter-item
+                            data-tags="摄影,季节" data-search="红叶与樱花 黄磜全年摄影时间表"
+                            data-reveal>
+                            <div class="guide-row__media">
+                                <img src="assets/img/uphoto-1508264165352-258db2ebd59b-w700.jpg"
+                                    alt="红叶林海" loading="lazy">
+                                <span class="guide-row__read-time">7 分钟</span>
+                            </div>
+                            <div class="guide-row__body">
+                                <h2 class="guide-row__title">全年摄影时间表：什么时候来拍什么</h2>
+                                <p class="guide-row__excerpt">
+                                    按月份排的机位清单 —— 3 月茶田晨雾、6 月竹林绿意、11 月红叶、1 月樱花。
+                                    每段都标了最佳时段与光线方向，附各机位的步行距离。
+                                </p>
+                                <div class="guide-row__author">
+                                    <span class="avatar avatar--sm" aria-hidden="true">影</span>
+                                    <div>
+                                        <div style="color:var(--text-strong);font-weight:var(--weight-semibold)">驻镇摄影师</div>
+                                        <div>2026 年 2 月更新</div>
+                                    </div>
+                                    <div class="guide-row__stats">
+                                        <span class="guide-row__stat">👁 9.1k</span>
+                                        <span class="guide-row__stat">♡ 703</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a class="guide-row" href="guide-detail.html" data-filter-item
+                            data-tags="美食,省钱" data-search="黄磜必吃 佛手瓜 茶叶 土产伴手礼"
+                            data-reveal>
+                            <div class="guide-row__media">
+                                <img src="assets/img/uphoto-1488459716781-31db52582fe9-w700.jpg"
+                                    alt="黄磜土产与茶点" loading="lazy">
+                                <span class="guide-row__read-time">6 分钟</span>
+                            </div>
+                            <div class="guide-row__body">
+                                <h2 class="guide-row__title">买什么带回去：黄磜土产价格对照表</h2>
+                                <p class="guide-row__excerpt">
+                                    佛手瓜、乌龙茶、红茶、香芋、西瓜、月饼、蛋黄酥、酱菜 ——
+                                    八样土产的当地参考价一次列清，附上哪几样适合长途带、哪几样别买多。
+                                </p>
+                                <div class="guide-row__author">
+                                    <span class="avatar avatar--sm" aria-hidden="true">食</span>
+                                    <div>
+                                        <div style="color:var(--text-strong);font-weight:var(--weight-semibold)">圩镇市集</div>
+                                        <div>2026 年 5 月更新</div>
+                                    </div>
+                                    <div class="guide-row__stats">
+                                        <span class="guide-row__stat">👁 15.2k</span>
+                                        <span class="guide-row__stat">♡ 1.1k</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a class="guide-row" href="guide-detail.html" data-filter-item
+                            data-tags="亲子,新手" data-search="带孩子去黄磜 亲子 两日安排"
+                            data-reveal>
+                            <div class="guide-row__media">
+                                <img src="assets/img/uphoto-1509440159596-0249088772ff-w700.jpg"
+                                    alt="亲子烘焙体验" loading="lazy">
+                                <span class="guide-row__read-time">9 分钟</span>
+                            </div>
+                            <div class="guide-row__body">
+                                <h2 class="guide-row__title">带孩子去黄磜：两天怎么安排不折腾</h2>
+                                <p class="guide-row__excerpt">
+                                    小朋友坐不住长车程，所以住宿一定要选在体验点附近。这份安排把每天的车程
+                                    压到 40 分钟以内，中间留足午睡时间。
+                                </p>
+                                <div class="guide-row__author">
+                                    <span class="avatar avatar--sm" aria-hidden="true">亲</span>
+                                    <div>
+                                        <div style="color:var(--text-strong);font-weight:var(--weight-semibold)">亲子体验组</div>
+                                        <div>2026 年 6 月更新</div>
+                                    </div>
+                                    <div class="guide-row__stats">
+                                        <span class="guide-row__stat">👁 7.5k</span>
+                                        <span class="guide-row__stat">♡ 519</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a class="guide-row" href="guide-detail.html" data-filter-item
+                            data-tags="深度,省钱" data-search="三日禅茶康养 西莲山寺 慢旅行"
+                            data-reveal>
+                            <div class="guide-row__media">
+                                <img src="assets/img/p37470752.jpg"
+                                    alt="西莲山寺山门" loading="lazy">
+                                <span class="guide-row__read-time">10 分钟</span>
+                            </div>
+                            <div class="guide-row__body">
+                                <h2 class="guide-row__title">三日禅茶康养：把节奏彻底放慢</h2>
+                                <p class="guide-row__excerpt">
+                                    住西莲山寺客舍，早起随早课，白天抄经喝茶。三天里只安排一次外出，
+                                    其余时间都在山上 —— 适合真正想休息的人。
+                                </p>
+                                <div class="guide-row__author">
+                                    <span class="avatar avatar--sm" aria-hidden="true">禅</span>
+                                    <div>
+                                        <div style="color:var(--text-strong);font-weight:var(--weight-semibold)">康养线路组</div>
+                                        <div>2026 年 1 月更新</div>
+                                    </div>
+                                    <div class="guide-row__stats">
+                                        <span class="guide-row__stat">👁 4.3k</span>
+                                        <span class="guide-row__stat">♡ 287</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a class="guide-row" href="guide-detail.html" data-filter-item
+                            data-tags="摄影,汉服" data-search="汉服旅拍 服装 造型 拍摄点位"
+                            data-reveal>
+                            <div class="guide-row__media">
+                                <img src="assets/img/p30364262.jpg"
+                                    alt="茶园汉服拍摄" loading="lazy">
+                                <span class="guide-row__read-time">5 分钟</span>
+                            </div>
+                            <div class="guide-row__body">
+                                <h2 class="guide-row__title">汉服旅拍避坑：造型、时机与机位</h2>
+                                <p class="guide-row__excerpt">
+                                    宋制还是明制？深色还是浅色？茶田的绿背景下哪些颜色会糊成一片？
+                                    这份清单把选衣、妆容和时段三个最容易翻车的点说清楚。
+                                </p>
+                                <div class="guide-row__author">
+                                    <span class="avatar avatar--sm" aria-hidden="true">妆</span>
+                                    <div>
+                                        <div style="color:var(--text-strong);font-weight:var(--weight-semibold)">旅拍妆造组</div>
+                                        <div>2026 年 3 月更新</div>
+                                    </div>
+                                    <div class="guide-row__stats">
+                                        <span class="guide-row__stat">👁 11.8k</span>
+                                        <span class="guide-row__stat">♡ 934</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a class="guide-row" href="guide-detail.html" data-filter-item
+                            data-tags="新手" data-search="交通指南 怎么到黄磜 自驾 客运"
+                            data-reveal>
+                            <div class="guide-row__media">
+                                <img src="assets/img/p37302362.jpg"
+                                    alt="通往黄磜镇的盘山公路" loading="lazy">
+                                <span class="guide-row__read-time">4 分钟</span>
+                            </div>
+                            <div class="guide-row__body">
+                                <h2 class="guide-row__title">怎么到黄磜：自驾、高铁、客运全对比</h2>
+                                <p class="guide-row__excerpt">
+                                    从广州、韶关、深圳三个方向出发的实际用时与路线。也说清楚为什么
+                                    到了镇上之后，没车会很不方便。
+                                </p>
+                                <div class="guide-row__author">
+                                    <span class="avatar avatar--sm" aria-hidden="true">交</span>
+                                    <div>
+                                        <div style="color:var(--text-strong);font-weight:var(--weight-semibold)">交通服务组</div>
+                                        <div>2026 年 6 月更新</div>
+                                    </div>
+                                    <div class="guide-row__stats">
+                                        <span class="guide-row__stat">👁 18.6k</span>
+                                        <span class="guide-row__stat">♡ 1.4k</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+
+                        <!-- 空状态 -->
+                        <div class="empty-state" data-filter-empty hidden>
+                            <div class="empty-state__icon" aria-hidden="true">
+                                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="7" />
+                                    <path d="m20 20-3.5-3.5" />
+                                </svg>
+                            </div>
+                            <h3 class="empty-state__title">没有找到相关攻略</h3>
+                            <p class="empty-state__desc">
+                                攻略总量不多，但覆盖了大部分常见问题。<br>
+                                换个关键词试试，或者直接打热线问 —— 有些冷门问题我们也会补写。
+                            </p>
+                            <div class="empty-state__actions">
+                                <button class="btn btn--primary" type="button" data-filter-clear>查看全部攻略</button>
+                                <a class="btn btn--secondary" href="tel:07512423088">电话咨询</a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- ---------- 侧栏 ---------- -->
+                    <aside class="guides-sidebar" aria-label="攻略辅助信息">
+
+                        <div class="card side-card">
+                            <h2 class="side-card__title">本周热读 TOP5</h2>
+                            <ol class="rank-list">
+                                <li class="rank-list__item">
+                                    <span class="rank-list__no">1</span>
+                                    <div class="rank-list__body">
+                                        <a class="rank-list__name" href="guide-detail.html">怎么到黄磜：三种交通对比</a>
+                                        <span class="rank-list__meta">18.6k 阅读</span>
+                                    </div>
+                                </li>
+                                <li class="rank-list__item">
+                                    <span class="rank-list__no">2</span>
+                                    <div class="rank-list__body">
+                                        <a class="rank-list__name" href="guide-detail.html">土产价格对照表</a>
+                                        <span class="rank-list__meta">15.2k 阅读</span>
+                                    </div>
+                                </li>
+                                <li class="rank-list__item">
+                                    <span class="rank-list__no">3</span>
+                                    <div class="rank-list__body">
+                                        <a class="rank-list__name" href="guide-detail.html">一日采茶线怎么走</a>
+                                        <span class="rank-list__meta">12.4k 阅读</span>
+                                    </div>
+                                </li>
+                                <li class="rank-list__item">
+                                    <span class="rank-list__no">4</span>
+                                    <div class="rank-list__body">
+                                        <a class="rank-list__name" href="guide-detail.html">汉服旅拍避坑清单</a>
+                                        <span class="rank-list__meta">11.8k 阅读</span>
+                                    </div>
+                                </li>
+                                <li class="rank-list__item">
+                                    <span class="rank-list__no">5</span>
+                                    <div class="rank-list__body">
+                                        <a class="rank-list__name" href="guide-detail.html">全年摄影时间表</a>
+                                        <span class="rank-list__meta">9.1k 阅读</span>
+                                    </div>
+                                </li>
+                            </ol>
+                        </div>
+
+                        <div class="card side-card side-card--tint">
+                            <h2 class="side-card__title">按天数找行程</h2>
+                            <div class="stack stack--sm">
+                                <a class="topic-link" href="guide-detail.html">
+                                    <span class="topic-link__label">一日游</span>
+                                    <span class="topic-link__meta">¥180 / 人</span>
+                                </a>
+                                <a class="topic-link" href="guide-detail.html">
+                                    <span class="topic-link__label">两日游</span>
+                                    <span class="topic-link__meta">¥420 / 人</span>
+                                </a>
+                                <a class="topic-link" href="guide-detail.html">
+                                    <span class="topic-link__label">三日游</span>
+                                    <span class="topic-link__meta">¥760 / 人</span>
+                                </a>
+                                <a class="topic-link" href="guide-detail.html">
+                                    <span class="topic-link__label">四季红叶线</span>
+                                    <span class="topic-link__meta">¥150 / 人</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="card side-card">
+                            <h2 class="side-card__title">出发前必看</h2>
+                            <ul class="fact-list">
+                                <li><strong>带现金：</strong>部分农家体验与民宿只收现金或微信。</li>
+                                <li><strong>穿长袖：</strong>茶园和竹林蚊虫多，尤其在 5–9 月。</li>
+                                <li><strong>备外套：</strong>营盘一带夜间比县城低 4–6℃。</li>
+                                <li><strong>查花期：</strong>红叶与樱花窗口都只有两三周，出发前先确认。</li>
+                            </ul>
+                        </div>
+
+                        <div class="card side-card side-card--accent">
+                            <h2 class="side-card__title">想让本地人帮你排行程？</h2>
+                            <p class="side-card__text">
+                                说出你的日期、人数和同行者情况，镇旅游服务热线按当季实际情况给你排一份行程。
+                                服务时间 8:30–17:30。
+                            </p>
+                            <a class="btn btn--primary btn--block" href="tel:07512423088">拨打 0751-2423088</a>
+                            <a class="btn btn--ghost btn--block btn--sm" href="mailto:info@huangzai.com">发送邮件咨询</a>
+                        </div>
+
+                    </aside>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <div class="container footer__grid">
+            <div>
+                <span class="footer__brand-name">
+                    <span class="navbar__mark" aria-hidden="true">磜</span>
+                    <span>黄磜镇农文旅</span>
+                </span>
+                <p class="footer__about">
+                    广东省韶关市新丰县黄磜镇 · 平均海拔 560 米，森林覆盖率 86.9%<br>
+                    以高山茶、佛手瓜与客家古村为核心的农文旅综合服务平台。
+                </p>
+            </div>
+            <nav aria-label="页面导航">
+                <h3 class="footer__col-title">逛一逛</h3>
+                <div class="footer__links">
+                    <a href="index.html">首页</a>
+                    <a href="attractions.html">景点特色</a>
+                    <a href="stays.html">精选住宿</a>
+                    <a href="experiences.html">游玩体验</a>
+                    <a href="guides.html">全域攻略</a>
+                </div>
+            </nav>
+            <div>
+                <h3 class="footer__col-title">联系黄磜</h3>
+                <div class="footer__links">
+                    <a href="tel:07512423088">旅游热线 0751-2423088</a>
+                    <a href="mailto:info@huangzai.com">info@huangzai.com</a>
+                    <span>服务时间 8:30–17:30</span>
+                    <span>韶关市新丰县黄磜镇</span>
+                </div>
+            </div>
+            <div>
+                <h3 class="footer__col-title">行车提示</h3>
+                <div class="footer__links">
+                    <span>距新丰县城 23 公里</span>
+                    <span>镇内建议自驾或包车</span>
+                    <span>红叶季 11 月 · 樱花季 1–2 月</span>
+                </div>
+            </div>
+        </div>
+        <div class="container footer__bottom">
+            <span>© <span data-year>2026</span> 黄磜镇农文旅综合服务平台 · 界面设计方案演示</span>
+            <span>本站为设计作品，非官方发布渠道</span>
+        </div>
+    </footer>
+
+    <button class="to-top" type="button" data-to-top aria-label="回到顶部">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m5 12 7-7 7 7M12 19V5" />
+        </svg>
+    </button>
+
+    <ul class="toast-stack" data-toast-stack aria-live="polite" aria-atomic="false"></ul>
+
+    <script src="assets/js/app.js" defer></script>
+</body>
+
+</html>

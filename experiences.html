@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="黄磜镇旅客体验合集 —— 茶园汉服旅拍、采茶制茶、专业旅拍、手作工坊与民俗活动，瀑布流浏览，点开即看包含项目与预约方式。">
+    <meta name="theme-color" content="#3D5A27">
+    <title>游玩体验 · 旅客玩什么 | 黄磜镇农文旅综合服务平台</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Archivo:wght@600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="assets/css/tokens.css">
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/pages.css">
+    <link rel="stylesheet" href="assets/css/components-extra.css">
+
+    <script>
+        (function () {
+            try {
+                var t = localStorage.getItem('hz-theme');
+                if (!t) { t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; }
+                document.documentElement.setAttribute('data-theme', t);
+            } catch (e) { }
+        })();
+    </script>
+</head>
+
+<body>
+    <a class="skip-link" href="#main">跳到主要内容</a>
+
+    <header class="navbar navbar--solid" id="navbar">
+        <div class="container navbar__inner">
+            <a class="navbar__logo" href="index.html" aria-label="黄磜镇农文旅综合服务平台 · 返回首页">
+                <span class="navbar__mark" aria-hidden="true">磜</span>
+                <span>黄磜镇农文旅</span>
+            </a>
+            <nav class="navbar__links" aria-label="主导航">
+                <a class="navbar__link" href="index.html">首页</a>
+                <a class="navbar__link" href="attractions.html">景点</a>
+                <a class="navbar__link" href="stays.html">住宿</a>
+                <a class="navbar__link" href="experiences.html" aria-current="page">体验</a>
+                <a class="navbar__link" href="guides.html">攻略</a>
+            </nav>
+            <div class="navbar__actions">
+                <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换深色主题">
+                    <svg class="theme-toggle__moon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+                        <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
+                    </svg>
+                    <svg class="theme-toggle__sun" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="4" />
+                        <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+                    </svg>
+                </button>
+                <button class="navbar__toggle" type="button" data-drawer-open="mainDrawer" aria-label="打开导航菜单"
+                    aria-expanded="false" aria-controls="mainDrawer">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+                        <path d="M3 6h18M3 12h18M3 18h18" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="drawer" id="mainDrawer" role="dialog" aria-modal="true" aria-label="导航菜单">
+        <div class="drawer__scrim" data-drawer-close></div>
+        <div class="drawer__panel">
+            <div class="drawer__header">
+                <span class="drawer__title">导航</span>
+                <button class="drawer__close" type="button" data-drawer-close aria-label="关闭菜单">✕</button>
+            </div>
+            <nav class="drawer__nav" aria-label="移动端导航">
+                <a class="drawer__link" href="index.html">首页 <span aria-hidden="true">›</span></a>
+                <a class="drawer__link" href="attractions.html">景点特色 <span aria-hidden="true">›</span></a>
+                <a class="drawer__link" href="stays.html">精选住宿 <span aria-hidden="true">›</span></a>
+                <a class="drawer__link" href="experiences.html" aria-current="page">游玩体验 <span aria-hidden="true">›</span></a>
+                <a class="drawer__link" href="guides.html">全域攻略 <span aria-hidden="true">›</span></a>
+            </nav>
+        </div>
+    </div>
+
+    <main id="main">
+
+        <!-- ==================== HERO ==================== -->
+        <header class="page-header">
+            <div class="page-header__media">
+                <img src="assets/img/p30364262.jpg"
+                    alt="游客在茶园中进行汉服旅拍">
+            </div>
+            <div class="container">
+                <div class="page-header__inner">
+                    <nav class="breadcrumb" aria-label="面包屑导航">
+                        <a href="index.html">首页</a>
+                        <span class="breadcrumb__sep" aria-hidden="true">/</span>
+                        <span aria-current="page">游玩体验</span>
+                    </nav>
+                    <h1 class="page-header__title">旅客玩什么</h1>
+                    <p class="page-header__desc">
+                        不只是看风景。换上汉服走进茶田、亲手炒一锅茶、在竹林里吃一顿茶宴 ——
+                        11 项可以真正上手参与的体验，价格与包含项目都写清楚了。
+                    </p>
+                    <div class="page-header__stats">
+                        <div>
+                            <div class="page-header__stat-value">11</div>
+                            <div class="page-header__stat-label">可预约体验</div>
+                        </div>
+                        <div>
+                            <div class="page-header__stat-value">¥120<span style="font-size:.6em">起</span></div>
+                            <div class="page-header__stat-label">人均价格</div>
+                        </div>
+                        <div>
+                            <div class="page-header__stat-value">1–4<span style="font-size:.6em">小时</span></div>
+                            <div class="page-header__stat-label">单项时长</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- ==================== 筛选栏 ==================== -->
+        <div class="filterbar" id="filterbar">
+            <div class="container">
+                <div class="filterbar__row">
+                    <div class="chip-group" data-filter-group="cat" role="group" aria-label="按体验类型筛选">
+                        <button class="chip is-active" type="button" data-filter-value="all" aria-pressed="true">全部</button>
+                        <button class="chip" type="button" data-filter-value="汉服" aria-pressed="false">汉服穿越</button>
+                        <button class="chip" type="button" data-filter-value="采茶" aria-pressed="false">采茶制茶</button>
+                        <button class="chip" type="button" data-filter-value="旅拍" aria-pressed="false">专业旅拍</button>
+                        <button class="chip" type="button" data-filter-value="手作" aria-pressed="false">手作工坊</button>
+                        <button class="chip" type="button" data-filter-value="民俗" aria-pressed="false">民俗活动</button>
+                    </div>
+                </div>
+
+                <div class="filterbar__row filterbar__row--wrap">
+                    <label class="search-field" style="flex:1 1 220px;max-width:320px">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+                            <circle cx="11" cy="11" r="7" />
+                            <path d="m20 20-3.5-3.5" />
+                        </svg>
+                        <span class="sr-only">搜索体验项目</span>
+                        <input type="search" placeholder="搜索体验，如「汉服」「茶宴」" data-search-input>
+                    </label>
+
+                    <div class="price-slider" data-price-range>
+                        <span class="price-slider__label">人均预算</span>
+                        <input class="range" type="range" min="60" max="480" step="20" value="480" data-price-input
+                            aria-label="人均预算上限，单位元">
+                        <output class="price-slider__value" data-price-output>¥60 – ¥480</output>
+                    </div>
+
+                    <div class="filterbar__spacer"></div>
+                    <button class="btn btn--ghost btn--sm" type="button" data-filter-clear hidden>清除筛选</button>
+                </div>
+
+                <p class="filter-summary" data-filter-summary role="status" aria-live="polite"></p>
+                <p class="filter-summary"><span>共 <strong data-filter-count>11</strong> 项体验 · 点击卡片查看包含项目与预约须知</span></p>
+            </div>
+        </div>
+
+        <!-- ==================== 瀑布流 ==================== -->
+        <section class="section section--tight">
+            <div class="container">
+                <div class="masonry" data-filter-results>
+
+                    <article class="card card--interactive exp-card" data-filter-item
+                        data-tags="汉服,旅拍" data-search="茶园汉服旅拍 古风 摄影"
+                        data-price="199" data-rating="4.9"
+                        data-detail data-title="茶园汉服旅拍" data-price="199" data-image="assets/img/p37664482.jpg"
+                        data-desc="在千亩茶田里换上宋制或明制汉服，由驻场摄影师带你走位。晨间薄雾和傍晚侧逆光是最出片的两个时段，套餐含 30 张精修。"
+                        data-duration="2–3 小时" data-people="1–4 人" data-rating-text="4.9（326 条）"
+                        data-includes="汉服一套（含头饰与妆造）|驻场摄影师 2 小时|30 张精修底片|茶田场景多点位切换"
+                        data-excludes="往返交通|餐食|超出 30 张的加修费用"
+                        data-notice="旺季（3–5 月、10–11 月）建议提前 3 天预约；雨天可改期或改至室内茶室场景。"
+                        data-reveal>
+                        <button class="card__media card__media--tall" type="button" aria-label="查看茶园汉服旅拍详情">
+                            <img src="assets/img/p37664482.jpg"
+                                alt="游客身着汉服在茶田间拍摄" loading="lazy">
+                            <span class="badge badge--on-image">最受欢迎</span>
+                            <span class="exp-card__price-tag">
+                                <span class="price__currency">¥</span><span class="price__value tabular">199</span>
+                                <span class="price__unit">/人</span>
+                            </span>
+                        </button>
+                        <div class="card__body">
+                            <h3 class="card__title">茶园汉服旅拍</h3>
+                            <p class="card__text">含妆造 + 摄影师跟拍 2 小时，晨雾与夕阳两个黄金时段可选。</p>
+                            <div class="card__meta">
+                                <span class="rating"><span class="rating__score tabular">4.9</span>
+                                    <span class="rating__count">（326）</span></span>
+                                <span>2–3 小时</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="card card--interactive exp-card" data-filter-item
+                        data-tags="采茶,手作" data-search="采茶制茶全流程 炒茶 采青"
+                        data-price="120" data-rating="4.8"
+                        data-detail data-title="采茶制茶全流程" data-price="120" data-image="assets/img/p4544202.jpg"
+                        data-desc="跟着茶农上山采一芽二叶，再回到炒茶房亲手杀青、揉捻、烘干。做好的茶可以带走，大概能出二两干茶。"
+                        data-duration="3 小时" data-people="2–10 人" data-rating-text="4.8（512 条）"
+                        data-includes="采茶竹篓与围裙|茶农全程带教|炒茶房实操工位|成品茶叶约二两（可带走）|一杯现泡高山茶"
+                        data-excludes="往返茶园交通|正餐"
+                        data-notice="采茶季节以 3–5 月春茶、9–10 月秋茶最佳；其余时段可参加炒茶与品鉴环节。"
+                        data-reveal>
+                        <button class="card__media card__media--wide" type="button" aria-label="查看采茶制茶详情">
+                            <img src="assets/img/p4544202.jpg"
+                                alt="茶农在茶园采茶" loading="lazy">
+                            <span class="exp-card__price-tag">
+                                <span class="price__currency">¥</span><span class="price__value tabular">120</span>
+                                <span class="price__unit">/人</span>
+                            </span>
+                        </button>
+                        <div class="card__body">
+                            <h3 class="card__title">采茶制茶全流程</h3>
+                            <p class="card__text">从采青到出茶全程自己动手，成品可带走二两。</p>
+                            <div class="card__meta">
+                                <span class="rating"><span class="rating__score tabular">4.8</span>
+                                    <span class="rating__count">（512）</span></span>
+                                <span>3 小时</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="card card--interactive exp-card" data-filter-item
+                        data-tags="手作,民俗" data-search="竹林茶宴 农家菜 全茶宴"
+                        data-price="168" data-rating="4.7"
+                        data-detail data-title="竹林茶宴" data-price="168" data-image="assets/img/uphoto-1414235077428-338989a2e8c0-w900.jpg"
+                        data-desc="在万亩竹林里支起长桌，八道菜全部以茶入馔 —— 茶香鸡、茶油焖笋、茶末蒸蛋。饭后有竹筒茶现烤。"
+                        data-duration="2 小时" data-people="4–20 人" data-rating-text="4.7（184 条）"
+                        data-includes="八道茶宴菜品|竹筒现烤茶|竹林长桌场地|茶农讲解茶食搭配"
+                        data-excludes="酒水|往返交通"
+                        data-notice="需提前 1 天预约，满 4 人开席；雨季视天气调整至室内茶厂。"
+                        data-reveal>
+                        <button class="card__media" type="button" aria-label="查看竹林茶宴详情">
+                            <img src="assets/img/uphoto-1414235077428-338989a2e8c0-w700.jpg"
+                                alt="竹林中的长桌茶宴" loading="lazy">
+                            <span class="exp-card__price-tag">
+                                <span class="price__currency">¥</span><span class="price__value tabular">168</span>
+                                <span class="price__unit">/人</span>
+                            </span>
+                        </button>
+                        <div class="card__body">
+                            <h3 class="card__title">竹林茶宴</h3>
+                            <p class="card__text">竹林长桌，八道茶馔，饭后现烤竹筒茶。</p>
+                            <div class="card__meta">
+                                <span class="rating"><span class="rating__score tabular">4.7</span>
+                                    <span class="rating__count">（184）</span></span>
+                                <span>2 小时</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="card card--interactive exp-card" data-filter-item
+                        data-tags="旅拍,民俗" data-search="秋日红叶人像 银杏 摄影"
+                        data-price="260" data-rating="4.9"
+                        data-detail data-title="秋日红叶人像跟拍" data-price="260" data-image="assets/img/uphoto-1508264165352-258db2ebd59b-w900.jpg"
+                        data-desc="11 月红叶季限定。摄影师熟悉林子里每一处光线最好的机位，全程跟拍 3 小时，含 40 张精修。"
+                        data-duration="3 小时" data-people="1–3 人" data-rating-text="4.9（97 条）"
+                        data-includes="摄影师全程跟拍 3 小时|40 张精修底片|服装造型建议|红叶林多点位走位"
+                        data-excludes="服装租赁|景区门票|往返交通"
+                        data-notice="仅 11 月至 12 月上旬红叶期开放，需提前一周预约并确认红叶状态。"
+                        data-reveal>
+                        <button class="card__media card__media--tall" type="button" aria-label="查看秋日红叶人像跟拍详情">
+                            <img src="assets/img/uphoto-1508264165352-258db2ebd59b-w700.jpg"
+                                alt="秋季红叶林中的人像拍摄" loading="lazy">
+                            <span class="badge badge--on-image">季节限定</span>
+                            <span class="exp-card__price-tag">
+                                <span class="price__currency">¥</span><span class="price__value tabular">260</span>
+                                <span class="price__unit">/组</span>
+                            </span>
+                        </button>
+                        <div class="card__body">
+                            <h3 class="card__title">秋日红叶人像跟拍</h3>
+                            <p class="card__text">仅 11 月开放，摄影师带路走最好光的机位。</p>
+                            <div class="card__meta">
+                                <span class="rating"><span class="rating__score tabular">4.9</span>
+                                    <span class="rating__count">（97）</span></span>
+                                <span>3 小时</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="card card--interactive exp-card" data-filter-item
+                        data-tags="手作" data-search="客家擂茶 手作 研磨"
+                        data-price="88" data-rating="4.6"
+                        data-detail data-title="客家擂茶手作" data-price="88" data-image="assets/img/uphoto-1558160074-4d7d8bdf4256-w900.jpg"
+                        data-desc="用山苍子木擂钵把茶叶、花生、芝麻慢慢磨成糊，冲入沸水。这是客家人待客的第一道礼数，做起来比想象中费力。"
+                        data-duration="1.5 小时" data-people="2–12 人" data-rating-text="4.6（238 条）"
+                        data-includes="擂钵与原料一份|老师傅带做|成品擂茶一碗|搭配茶点两样"
+                        data-excludes="正餐|交通"
+                        data-notice="全天多个时段可约，适合行程中临时加入，建议提前 2 小时电话确认。"
+                        data-reveal>
+                        <button class="card__media card__media--wide" type="button" aria-label="查看客家擂茶手作详情">
+                            <img src="assets/img/uphoto-1558160074-4d7d8bdf4256-w700.jpg"
+                                alt="客家擂茶制作过程" loading="lazy">
+                            <span class="exp-card__price-tag">
+                                <span class="price__currency">¥</span><span class="price__value tabular">88</span>
+                                <span class="price__unit">/人</span>
+                            </span>
+                        </button>
+                        <div class="card__body">
+                            <h3 class="card__title">客家擂茶手作</h3>
+                            <p class="card__text">擂钵研磨，客家人待客的第一道礼数。</p>
+                            <div class="card__meta">
+                                <span class="rating"><span class="rating__score tabular">4.6</span>
+                                    <span class="rating__count">（238）</span></span>
+                                <span>1.5 小时</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="card card--interactive exp-card" data-filter-item
+                        data-tags="民俗,采茶" data-search="开茶节 民俗 祭茶"
+                        data-price="60" data-rating="4.8"
+                        data-detail data-title="春茶开茶节" data-price="60" data-image="assets/img/p32700828.jpg"
+                        data-desc="每年 3 月下旬的镇级民俗活动。祭茶神、喊山开园、茶园巡游，周边村民都会来，是一年里最热闹的几天。"
+                        data-duration="半天" data-people="不限" data-rating-text="4.8（641 条）"
+                        data-includes="开茶节入场|喊山开园仪式观礼|茶园巡游|新茶品鉴"
+                        data-excludes="餐饮|往返交通|住宿"
+                        data-notice="每年 3 月下旬举办，具体日期以镇公告为准；当天人流较大，建议早到。"
+                        data-reveal>
+                        <button class="card__media" type="button" aria-label="查看春茶开茶节详情">
+                            <img src="assets/img/p32700828.jpg"
+                                alt="春茶开茶节民俗活动现场" loading="lazy">
+                            <span class="badge badge--on-image">年度活动</span>
+                            <span class="exp-card__price-tag">
+                                <span class="price__currency">¥</span><span class="price__value tabular">60</span>
+                                <span class="price__unit">/人</span>
+                            </span>
+                        </button>
+                        <div class="card__body">
+                            <h3 class="card__title">春茶开茶节</h3>
+                            <p class="card__text">3 月下旬，祭茶神与喊山开园，全镇最热闹的几天。</p>
+                            <div class="card__meta">
+                                <span class="rating"><span class="rating__score tabular">4.8</span>
+                                    <span class="rating__count">（641）</span></span>
+                                <span>半天</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="card card--interactive exp-card" data-filter-item
+                        data-tags="手作" data-search="茶皂制作 手工皂 伴手礼"
+                        data-price="98" data-rating="4.5"
+                        data-detail data-title="茶皂与茶枕手作" data-price="98" data-image="assets/img/uphoto-1600857544200-b2f666a9a2ec-w900.jpg"
+                        data-desc="把茶粉、茶籽油做成手工皂，再缝一只装茶梗的助眠枕。做出来的东西都能带走，很适合当伴手礼。"
+                        data-duration="2 小时" data-people="2–8 人" data-rating-text="4.5（126 条）"
+                        data-includes="茶皂原料与模具|茶枕布料与填充茶梗|成品全部带走|老师带做"
+                        data-excludes="交通|餐食"
+                        data-notice="皂体需静置一天脱模，可代寄或第二日回店自取。"
+                        data-reveal>
+                        <button class="card__media card__media--tall" type="button" aria-label="查看茶皂与茶枕手作详情">
+                            <img src="assets/img/uphoto-1600857544200-b2f666a9a2ec-w700.jpg"
+                                alt="茶皂手作成品" loading="lazy">
+                            <span class="exp-card__price-tag">
+                                <span class="price__currency">¥</span><span class="price__value tabular">98</span>
+                                <span class="price__unit">/人</span>
+                            </span>
+                        </button>
+                        <div class="card__body">
+                            <h3 class="card__title">茶皂与茶枕手作</h3>
+                            <p class="card__text">手工皂加助眠茶枕，成品都能带走当伴手礼。</p>
+                            <div class="card__meta">
+                                <span class="rating"><span class="rating__score tabular">4.5</span>
+                                    <span class="rating__count">（126）</span></span>
+                                <span>2 小时</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="card card--interactive exp-card" data-filter-item
+                        data-tags="民俗" data-search="红色研学 县委旧址 讲解"
+                        data-price="150" data-rating="4.7"
+                        data-detail data-title="红色茶旅研学" data-price="150" data-image="assets/img/p33933748.jpg"
+                        data-desc="走高群县委旧址、黄沙坑抗日指挥部与梁坝抗战学校三个点，配党史讲解员，全程约 4 小时，适合单位与学校团队。"
+                        data-duration="4 小时" data-people="10–50 人" data-rating-text="4.7（88 条）"
+                        data-includes="三处旧址参观|党史讲解员全程陪同|研学手册一份|合影与纪念徽章"
+                        data-excludes="餐食|往返交通|住宿"
+                        data-notice="团队研学需提前 3 天预约并提供人数，可定制半日或一日议程。"
+                        data-reveal>
+                        <button class="card__media card__media--wide" type="button" aria-label="查看红色茶旅研学详情">
+                            <img src="assets/img/p33933748.jpg"
+                                alt="红色研学团队在旧址前参观" loading="lazy">
+                            <span class="exp-card__price-tag">
+                                <span class="price__currency">¥</span><span class="price__value tabular">150</span>
+                                <span class="price__unit">/人</span>
+                            </span>
+                        </button>
+                        <div class="card__body">
+                            <h3 class="card__title">红色茶旅研学</h3>
+                            <p class="card__text">三处旧址连走，配讲解员，适合单位与学校团队。</p>
+                            <div class="card__meta">
+                                <span class="rating"><span class="rating__score tabular">4.7</span>
+                                    <span class="rating__count">（88）</span></span>
+                                <span>4 小时</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="card card--interactive exp-card" data-filter-item
+                        data-tags="旅拍,汉服" data-search="樱花季旅拍 汉服 花期"
+                        data-price="299" data-rating="4.8"
+                        data-detail data-title="樱花季汉服旅拍" data-price="299" data-image="assets/img/p32073913.jpg"
+                        data-desc="1 月下旬至 2 月中，樱花峪花开最盛的两周。含两套汉服、专业妆造与 2.5 小时跟拍，是全年最抢手的档期。"
+                        data-duration="3 小时" data-people="1–2 人" data-rating-text="4.8（74 条）"
+                        data-includes="两套汉服（含头饰妆造）|摄影师跟拍 2.5 小时|35 张精修|樱花场景多点位"
+                        data-excludes="景区门票|往返交通|餐食"
+                        data-notice="仅樱花期开放，档期极紧张，建议提前 2–3 周预约。"
+                        data-reveal>
+                        <button class="card__media" type="button" aria-label="查看樱花季汉服旅拍详情">
+                            <img src="assets/img/p32073913.jpg"
+                                alt="樱花树下的汉服写真" loading="lazy">
+                            <span class="exp-card__price-tag">
+                                <span class="price__currency">¥</span><span class="price__value tabular">299</span>
+                                <span class="price__unit">/组</span>
+                            </span>
+                        </button>
+                        <div class="card__body">
+                            <h3 class="card__title">樱花季汉服旅拍</h3>
+                            <p class="card__text">1–2 月限定，两套汉服含妆造，全年最抢手。</p>
+                            <div class="card__meta">
+                                <span class="rating"><span class="rating__score tabular">4.8</span>
+                                    <span class="rating__count">（74）</span></span>
+                                <span>3 小时</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="card card--interactive exp-card" data-filter-item
+                        data-tags="采茶,手作" data-search="茶点制作 茶点 烘焙"
+                        data-price="108" data-rating="4.6"
+                        data-detail data-title="茶点烘焙工坊" data-price="108" data-image="assets/img/uphoto-1509440159596-0249088772ff-w900.jpg"
+                        data-desc="用当地茶粉和佛手瓜做茶味曲奇、茶香戚风。做完可以装盒带走，也可以直接坐下配茶吃掉。"
+                        data-duration="2 小时" data-people="2–10 人" data-rating-text="4.6（152 条）"
+                        data-includes="烘焙原料与工具|成品包装盒|茶饮一杯|老师带做"
+                        data-excludes="交通|正餐"
+                        data-notice="可亲子参加，建议 6 岁以上儿童在家长陪同下操作烤箱环节。"
+                        data-reveal>
+                        <button class="card__media card__media--tall" type="button" aria-label="查看茶点烘焙工坊详情">
+                            <img src="assets/img/uphoto-1509440159596-0249088772ff-w700.jpg"
+                                alt="茶点烘焙工坊制作的茶味点心" loading="lazy">
+                            <span class="exp-card__price-tag">
+                                <span class="price__currency">¥</span><span class="price__value tabular">108</span>
+                                <span class="price__unit">/人</span>
+                            </span>
+                        </button>
+                        <div class="card__body">
+                            <h3 class="card__title">茶点烘焙工坊</h3>
+                            <p class="card__text">茶味曲奇与茶香戚风，适合带小朋友一起做。</p>
+                            <div class="card__meta">
+                                <span class="rating"><span class="rating__score tabular">4.6</span>
+                                    <span class="rating__count">（152）</span></span>
+                                <span>2 小时</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="card card--interactive exp-card" data-filter-item
+                        data-tags="民俗" data-search="客家山歌 夜话 篝火"
+                        data-price="80" data-rating="4.4"
+                        data-detail data-title="客家山歌夜话" data-price="80" data-image="assets/img/uphoto-1475483768296-6163e08872a1-w900.jpg"
+                        data-desc="入夜后围一圈篝火，村里唱山歌的老人一句一句教你。听不懂客家话也没关系，调子比词重要。"
+                        data-duration="1.5 小时" data-people="6–30 人" data-rating-text="4.4（113 条）"
+                        data-includes="篝火场地|山歌老师带唱|客家米酒一杯|烤茶点"
+                        data-excludes="住宿|往返交通"
+                        data-notice="晚间 19:30 开始，雨天改至祠堂内；建议提前 1 天预约。"
+                        data-reveal>
+                        <button class="card__media card__media--wide" type="button" aria-label="查看客家山歌夜话详情">
+                            <img src="assets/img/uphoto-1475483768296-6163e08872a1-w700.jpg"
+                                alt="夜晚篝火旁唱客家山歌" loading="lazy">
+                            <span class="exp-card__price-tag">
+                                <span class="price__currency">¥</span><span class="price__value tabular">80</span>
+                                <span class="price__unit">/人</span>
+                            </span>
+                        </button>
+                        <div class="card__body">
+                            <h3 class="card__title">客家山歌夜话</h3>
+                            <p class="card__text">围着篝火跟村里老人学唱山歌，调子比词重要。</p>
+                            <div class="card__meta">
+                                <span class="rating"><span class="rating__score tabular">4.4</span>
+                                    <span class="rating__count">（113）</span></span>
+                                <span>1.5 小时</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 空状态 -->
+                    <div class="empty-state" data-filter-empty hidden>
+                        <div class="empty-state__icon" aria-hidden="true">
+                            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="7" />
+                                <path d="m20 20-3.5-3.5" />
+                            </svg>
+                        </div>
+                        <h3 class="empty-state__title">没有匹配的体验项目</h3>
+                        <p class="empty-state__desc">
+                            可能是预算设得太低，或者类型叠加得太细。<br>
+                            黄磜的体验项目总量不大，放宽一点往往就有结果。
+                        </p>
+                        <div class="empty-state__actions">
+                            <button class="btn btn--primary" type="button" data-filter-clear>放宽筛选条件</button>
+                            <a class="btn btn--secondary" href="tel:07512423088">电话咨询 0751-2423088</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== 达人推荐 ==================== -->
+        <section class="section section--alt">
+            <div class="container">
+                <div class="section-head">
+                    <div>
+                        <p class="section-head__eyebrow">来过的怎么说</p>
+                        <h2 class="section-head__title">达人推荐</h2>
+                    </div>
+                </div>
+                <div class="grid grid--3">
+                    <figure class="card card--pad" data-reveal>
+                        <blockquote class="prose" style="margin-bottom:var(--space-4)">
+                            <p>「汉服旅拍是真的出片。早上六点半到茶田，雾还没散，摄影师比我们还准时 ——
+                                拿到片子那一刻觉得早起完全值得。」</p>
+                        </blockquote>
+                        <figcaption class="guide-row__author" style="border:0;padding-top:0">
+                            <span class="avatar avatar--sm" aria-hidden="true">林</span>
+                            <div>
+                                <div style="color:var(--text-strong);font-weight:var(--weight-semibold)">林小满</div>
+                                <div>小红书记录 · 3 月到访</div>
+                            </div>
+                        </figcaption>
+                    </figure>
+
+                    <figure class="card card--pad" data-reveal>
+                        <blockquote class="prose" style="margin-bottom:var(--space-4)">
+                            <p>「本来是带孩子随便转转，结果采茶制茶做了三个小时不肯走。炒完自己那锅茶装罐带走，
+                                回家天天泡，比买的有意义。」</p>
+                        </blockquote>
+                        <figcaption class="guide-row__author" style="border:0;padding-top:0">
+                            <span class="avatar avatar--sm" aria-hidden="true">陈</span>
+                            <div>
+                                <div style="color:var(--text-strong);font-weight:var(--weight-semibold)">陈先生</div>
+                                <div>亲子自驾 · 4 月到访</div>
+                            </div>
+                        </figcaption>
+                    </figure>
+
+                    <figure class="card card--pad" data-reveal>
+                        <blockquote class="prose" style="margin-bottom:var(--space-4)">
+                            <p>「竹林茶宴那顿吃得很安静。八道菜全是茶做的，最后那个竹筒现烤茶我到现在还记得味道。
+                                建议穿长袖，竹林里蚊子不少。」</p>
+                        </blockquote>
+                        <figcaption class="guide-row__author" style="border:0;padding-top:0">
+                            <span class="avatar avatar--sm" aria-hidden="true">周</span>
+                            <div>
+                                <div style="color:var(--text-strong);font-weight:var(--weight-semibold)">周叙</div>
+                                <div>美食探店 · 10 月到访</div>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== 预约提示 ==================== -->
+        <section class="section">
+            <div class="container">
+                <div class="promo-banner" data-reveal>
+                    <div>
+                        <h2 class="promo-banner__title">不确定选哪个？让工作人员帮你排</h2>
+                        <p class="promo-banner__text">
+                            把到访日期、人数和想玩的方向告诉镇旅游服务热线，工作人员会按当季花况与茶况，
+                            给你排一份能衔接得上的体验顺序 —— 毕竟采茶要赶早上，旅拍要赶光。
+                        </p>
+                    </div>
+                    <div class="promo-banner__actions">
+                        <a class="btn btn--on-image-solid" href="tel:07512423088">拨打 0751-2423088</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==================== 体验详情抽屉 ==================== -->
+    <div class="drawer detail-drawer" id="detailDrawer" role="dialog" aria-modal="true" aria-labelledby="detailTitle"
+        aria-label="体验详情">
+        <div class="drawer__scrim" data-drawer-close></div>
+        <div class="drawer__panel detail-drawer__panel">
+            <div data-detail-mount></div>
+        </div>
+    </div>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <div class="container footer__grid">
+            <div>
+                <span class="footer__brand-name">
+                    <span class="navbar__mark" aria-hidden="true">磜</span>
+                    <span>黄磜镇农文旅</span>
+                </span>
+                <p class="footer__about">
+                    广东省韶关市新丰县黄磜镇 · 平均海拔 560 米，森林覆盖率 86.9%<br>
+                    以高山茶、佛手瓜与客家古村为核心的农文旅综合服务平台。
+                </p>
+            </div>
+            <nav aria-label="页面导航">
+                <h3 class="footer__col-title">逛一逛</h3>
+                <div class="footer__links">
+                    <a href="index.html">首页</a>
+                    <a href="attractions.html">景点特色</a>
+                    <a href="stays.html">精选住宿</a>
+                    <a href="experiences.html">游玩体验</a>
+                    <a href="guides.html">全域攻略</a>
+                </div>
+            </nav>
+            <div>
+                <h3 class="footer__col-title">联系黄磜</h3>
+                <div class="footer__links">
+                    <a href="tel:07512423088">旅游热线 0751-2423088</a>
+                    <a href="mailto:info@huangzai.com">info@huangzai.com</a>
+                    <span>服务时间 8:30–17:30</span>
+                    <span>韶关市新丰县黄磜镇</span>
+                </div>
+            </div>
+            <div>
+                <h3 class="footer__col-title">行车提示</h3>
+                <div class="footer__links">
+                    <span>距新丰县城 23 公里</span>
+                    <span>镇内建议自驾或包车</span>
+                    <span>红叶季 11 月 · 樱花季 1–2 月</span>
+                </div>
+            </div>
+        </div>
+        <div class="container footer__bottom">
+            <span>© <span data-year>2026</span> 黄磜镇农文旅综合服务平台 · 界面设计方案演示</span>
+            <span>本站为设计作品，非官方发布渠道</span>
+        </div>
+    </footer>
+
+    <button class="to-top" type="button" data-to-top aria-label="回到顶部">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m5 12 7-7 7 7M12 19V5" />
+        </svg>
+    </button>
+
+    <ul class="toast-stack" data-toast-stack aria-live="polite" aria-atomic="false"></ul>
+
+    <script src="assets/js/app.js" defer></script>
+</body>
+
+</html>

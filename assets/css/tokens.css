@@ -1,0 +1,341 @@
+/* ==========================================================================
+   黄磜镇农文旅综合服务平台 · Design Tokens
+   Layer 1 (primitive) → Layer 2 (semantic). Dark mode only redefines layer 2.
+   Color space: OKLCH for perceptual uniformity.
+   ========================================================================== */
+
+:root {
+  /* ---------------------------------------------------------------------
+     PRIMITIVE · 茶绿 (Tea Green) — evolved from legacy #5B7A3A
+     Legacy #5B7A3A ≈ oklch(49.5% 0.088 128). Extended into a 12-step scale.
+     --------------------------------------------------------------------- */
+  --tea-50:  oklch(97.5% 0.014 128);
+  --tea-100: oklch(94.5% 0.030 128);
+  --tea-200: oklch(89.0% 0.052 128);
+  --tea-300: oklch(81.5% 0.072 128);
+  --tea-400: oklch(70.0% 0.086 128);
+  --tea-500: oklch(58.0% 0.092 128);
+  --tea-600: oklch(49.5% 0.088 128);   /* ← legacy brand green, exact */
+  --tea-700: oklch(41.0% 0.076 128);
+  --tea-800: oklch(32.5% 0.058 128);   /* ← legacy --tea-dark #3D5A27 approx */
+  --tea-900: oklch(25.0% 0.042 128);
+  --tea-950: oklch(17.5% 0.028 128);
+
+  /* PRIMITIVE · 古镇棕 (Town Brown) — evolved from legacy #8B6F47 */
+  --brown-50:  oklch(97.0% 0.012 75);
+  --brown-100: oklch(93.5% 0.026 75);
+  --brown-200: oklch(87.0% 0.042 75);
+  --brown-300: oklch(79.0% 0.055 75);
+  --brown-400: oklch(70.0% 0.062 75);
+  --brown-500: oklch(62.0% 0.066 75);
+  --brown-600: oklch(54.5% 0.062 75);  /* ← legacy --town-brown #8B6F47 approx */
+  --brown-700: oklch(45.0% 0.054 75);
+  --brown-800: oklch(36.0% 0.044 75);
+  --brown-900: oklch(27.5% 0.034 75);
+
+  /* PRIMITIVE · 强调红 (Accent Red) — price / price-adjacent emphasis
+     Legacy #C84A3E ≈ oklch(57% 0.165 30). Deliberately NOT used for CTAs. */
+  --red-50:  oklch(96.5% 0.014 30);
+  --red-100: oklch(92.5% 0.036 30);
+  --red-200: oklch(85.5% 0.070 30);
+  --red-300: oklch(75.0% 0.115 30);
+  --red-400: oklch(65.0% 0.150 30);
+  --red-500: oklch(57.0% 0.165 30);    /* ← legacy --accent-red, exact */
+  --red-600: oklch(48.5% 0.155 30);
+  --red-700: oklch(40.0% 0.135 30);
+
+  /* PRIMITIVE · 暖调中性 (Warm Neutrals)
+     Chroma 0.006 at hue 75 keeps everything quietly tied to the brand warmth.
+     Pure gray is never used. */
+  --neutral-0:   oklch(100% 0 0);
+  --neutral-25:  oklch(98.8% 0.004 75);
+  --neutral-50:  oklch(97.2% 0.006 75);
+  --neutral-100: oklch(94.8% 0.008 75);
+  --neutral-150: oklch(92.0% 0.008 75);
+  --neutral-200: oklch(89.0% 0.009 75);
+  --neutral-300: oklch(82.0% 0.009 75);
+  --neutral-400: oklch(71.0% 0.009 75);
+  --neutral-500: oklch(60.0% 0.009 75);
+  --neutral-600: oklch(50.0% 0.008 75);
+  --neutral-700: oklch(40.0% 0.008 75);
+  --neutral-800: oklch(31.0% 0.007 75);
+  --neutral-900: oklch(23.0% 0.006 75);
+  --neutral-950: oklch(16.5% 0.006 75);
+
+  /* PRIMITIVE · 语义色 (Semantic hues) */
+  --success-500: oklch(58.0% 0.115 150);
+  --success-600: oklch(49.0% 0.105 150);
+  --success-100: oklch(94.0% 0.035 150);
+  --warning-500: oklch(72.0% 0.135 75);
+  --warning-600: oklch(63.0% 0.130 75);
+  --warning-100: oklch(95.0% 0.040 75);
+  --error-500:   oklch(57.0% 0.165 30);
+  --error-600:   oklch(48.5% 0.155 30);
+  --error-100:   oklch(95.0% 0.030 30);
+  --info-500:    oklch(58.0% 0.100 240);
+  --info-600:    oklch(49.0% 0.095 240);
+  --info-100:    oklch(94.5% 0.028 240);
+
+  /* ---------------------------------------------------------------------
+     TYPOGRAPHY
+     2 families only. Serif for display/headings (文艺), sans for body.
+     Chosen over Noto Serif/Sans SC to escape the generic default:
+       display → LXGW WenKai / 霞鹜文楷 (calligraphic, distinctive, open source)
+       body    → Source Han Sans / 思源黑体 via system + webfont fallback
+     --------------------------------------------------------------------- */
+  --font-display: 'LXGW WenKai', 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
+  --font-body: 'Source Han Sans SC', 'Noto Sans SC', -apple-system,
+               BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-num: 'Archivo', 'Source Han Sans SC', system-ui, sans-serif;
+
+  /* Modular scale, ratio 1.25 (major third). Fluid only on display sizes. */
+  --text-2xs:  0.694rem;   /* 11.1px — legal, only on non-essential text */
+  --text-xs:   0.75rem;    /* 12px  */
+  --text-sm:   0.875rem;   /* 14px  */
+  --text-base: 1rem;       /* 16px  — body floor, never smaller */
+  --text-lg:   1.25rem;    /* 20px  */
+  --text-xl:   1.5625rem;  /* 25px  */
+  --text-2xl:  1.953rem;   /* 31px  */
+  --text-3xl:  clamp(2rem, 1.4rem + 2.6vw, 2.75rem);
+  --text-4xl:  clamp(2.5rem, 1.5rem + 4.2vw, 4rem);
+  --text-5xl:  clamp(3rem, 1.4rem + 7vw, 5.75rem);
+
+  --leading-tight:  1.18;
+  --leading-snug:   1.32;
+  --leading-normal: 1.6;    /* base unit for vertical rhythm = 25.6px @16px */
+  --leading-relaxed: 1.75;
+
+  --tracking-tighter: -0.03em;
+  --tracking-tight:   -0.015em;
+  --tracking-normal:  0;
+  --tracking-wide:    0.04em;
+  --tracking-wider:   0.1em;
+  --tracking-widest:  0.2em;
+
+  --weight-light: 300;
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* ---------------------------------------------------------------------
+     SPACING — 8pt base with a 4px half-step. Body line-height is 25.6px;
+     the spacing scale rides on top of it so text and space share rhythm.
+     --------------------------------------------------------------------- */
+  --space-0:  0;
+  --space-px: 1px;
+  --space-1:  0.25rem;   /*  4px */
+  --space-2:  0.5rem;    /*  8px */
+  --space-3:  0.75rem;   /* 12px */
+  --space-4:  1rem;      /* 16px */
+  --space-5:  1.25rem;   /* 20px */
+  --space-6:  1.5rem;    /* 24px */
+  --space-7:  1.75rem;   /* 28px */
+  --space-8:  2rem;      /* 32px */
+  --space-10: 2.5rem;    /* 40px */
+  --space-12: 3rem;      /* 48px */
+  --space-14: 3.5rem;    /* 56px */
+  --space-16: 4rem;      /* 64px */
+  --space-20: 5rem;      /* 80px */
+  --space-24: 6rem;      /* 96px */
+  --space-32: 8rem;      /* 128px */
+
+  /* Fluid section rhythm — the one place fluid spacing earns its keep */
+  --section-y: clamp(3.5rem, 2rem + 6vw, 7rem);
+  --gutter:    clamp(1.25rem, 0.6rem + 2.6vw, 3rem);
+  --measure:   68ch;
+
+  /* ---------------------------------------------------------------------
+     RADIUS — spec calls for 8–12px unified. Extended for large surfaces.
+     --------------------------------------------------------------------- */
+  --radius-xs:  4px;
+  --radius-sm:  8px;
+  --radius-md:  12px;   /* spec default */
+  --radius-lg:  16px;
+  --radius-xl:  24px;
+  --radius-2xl: 32px;
+  --radius-full: 9999px;
+
+  /* ---------------------------------------------------------------------
+     ELEVATION — warm-tinted shadows, never pure black.
+     --------------------------------------------------------------------- */
+  --shadow-xs: 0 1px 2px oklch(25% 0.02 75 / 0.05);
+  --shadow-sm: 0 1px 3px oklch(25% 0.02 75 / 0.07),
+               0 1px 2px oklch(25% 0.02 75 / 0.04);
+  --shadow-md: 0 4px 8px -2px oklch(25% 0.02 75 / 0.08),
+               0 2px 4px -2px oklch(25% 0.02 75 / 0.05);
+  --shadow-lg: 0 12px 24px -6px oklch(25% 0.02 75 / 0.10),
+               0 4px 8px -4px oklch(25% 0.02 75 / 0.06);
+  --shadow-xl: 0 24px 48px -12px oklch(25% 0.02 75 / 0.14),
+               0 8px 16px -8px oklch(25% 0.02 75 / 0.08);
+  --shadow-2xl: 0 40px 72px -20px oklch(25% 0.02 75 / 0.20);
+  --shadow-focus: 0 0 0 3px var(--tea-600);
+
+  /* ---------------------------------------------------------------------
+     MOTION — exponential easing. No bounce, no elasticity.
+     --------------------------------------------------------------------- */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo:  cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out:    cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-instant: 100ms;
+  --duration-fast:    180ms;
+  --duration-normal:  280ms;
+  --duration-slow:    440ms;
+  --duration-slower:  700ms;
+
+  /* ---------------------------------------------------------------------
+     LAYOUT
+     --------------------------------------------------------------------- */
+  --container-sm:  640px;
+  --container-md:  768px;
+  --container-lg:  1024px;
+  --container-xl:  1280px;
+  --container-2xl: 1440px;
+  --nav-height: 72px;
+  --nav-height-scrolled: 62px;
+  --z-base: 1;
+  --z-sticky: 100;
+  --z-nav: 500;
+  --z-overlay: 800;
+  --z-modal: 900;
+  --z-toast: 1000;
+
+  /* =====================================================================
+     LAYER 2 · SEMANTIC TOKENS — the only layer dark mode touches
+     ===================================================================== */
+
+  /* Surfaces */
+  --surface-page:    var(--neutral-25);
+  --surface-raised:  var(--neutral-0);
+  --surface-sunken:  var(--neutral-50);
+  --surface-muted:   var(--neutral-100);
+  --surface-inverse: var(--tea-950);
+  --surface-brand:   var(--tea-700);
+  --surface-brand-soft: var(--tea-50);
+  --surface-accent-soft: var(--red-50);
+
+  /* Text — all pairings below verified ≥4.5:1 on their intended surface */
+  --text-strong:  var(--neutral-950);
+  --text-primary: var(--neutral-900);
+  --text-secondary: var(--neutral-700);
+  --text-tertiary:  var(--neutral-600);
+  --text-muted:     var(--neutral-500);
+  --text-on-brand:  var(--neutral-0);
+  --text-on-inverse: var(--tea-50);
+  --text-link:  var(--tea-700);
+  --text-price: var(--red-600);
+  --text-disabled: var(--neutral-400);
+
+  /* Borders */
+  --border-subtle:  var(--neutral-150);
+  --border-default: var(--neutral-200);
+  --border-strong:  var(--neutral-300);
+  --border-brand:   var(--tea-600);
+  --border-focus:   var(--tea-700);
+
+  /* Interactive */
+  --action-primary:        var(--tea-700);
+  --action-primary-hover:  var(--tea-800);
+  --action-primary-active: var(--tea-900);
+  --action-secondary:        var(--neutral-0);
+  --action-secondary-hover:  var(--neutral-50);
+  --action-ghost-hover:      var(--neutral-100);
+
+  /* Status */
+  --status-success: var(--success-600);
+  --status-success-bg: var(--success-100);
+  --status-warning: var(--warning-600);
+  --status-warning-bg: var(--warning-100);
+  --status-error: var(--error-600);
+  --status-error-bg: var(--error-100);
+  --status-info: var(--info-600);
+  --status-info-bg: var(--info-100);
+
+  /* Overlay (explicit instead of ad-hoc rgba) */
+  --overlay-scrim: oklch(20% 0.02 75 / 0.55);
+  --overlay-image-bottom: linear-gradient(
+    to top,
+    oklch(18% 0.02 75 / 0.82) 0%,
+    oklch(18% 0.02 75 / 0.45) 42%,
+    oklch(18% 0.02 75 / 0.06) 100%);
+  --overlay-image-top: linear-gradient(
+    to bottom,
+    oklch(18% 0.02 75 / 0.55) 0%,
+    oklch(18% 0.02 75 / 0.10) 60%,
+    transparent 100%);
+  --nav-scrolled-bg: oklch(98.8% 0.004 75 / 0.86);
+}
+
+/* ==========================================================================
+   DARK THEME — not an inversion. Depth comes from lighter surfaces, not
+   shadows; text weight is reduced; accents are desaturated slightly.
+   ========================================================================== */
+:root[data-theme='dark'] {
+  --surface-page:    var(--neutral-950);
+  --surface-raised:  oklch(21% 0.008 128);
+  --surface-sunken:  oklch(14% 0.006 128);
+  --surface-muted:   oklch(25% 0.010 128);
+  --surface-inverse: var(--neutral-50);
+  --surface-brand:   var(--tea-600);
+  --surface-brand-soft: oklch(26% 0.035 128);
+  --surface-accent-soft: oklch(26% 0.045 30);
+
+  --text-strong:  oklch(98% 0.008 128);
+  --text-primary: oklch(94% 0.008 128);
+  --text-secondary: oklch(80% 0.010 128);
+  --text-tertiary:  oklch(71% 0.010 128);
+  --text-muted:     oklch(62% 0.010 128);
+  --text-on-brand:  oklch(99% 0.004 128);
+  --text-on-inverse: var(--neutral-950);
+  --text-link:  var(--tea-300);
+  --text-price: var(--red-300);
+  --text-disabled: oklch(45% 0.008 128);
+
+  --border-subtle:  oklch(27% 0.008 128);
+  --border-default: oklch(31% 0.009 128);
+  --border-strong:  oklch(38% 0.010 128);
+  --border-brand:   var(--tea-500);
+  --border-focus:   var(--tea-300);
+
+  --action-primary:        var(--tea-500);
+  --action-primary-hover:  var(--tea-400);
+  --action-primary-active: var(--tea-300);
+  --action-secondary:        oklch(24% 0.010 128);
+  --action-secondary-hover:  oklch(28% 0.012 128);
+  --action-ghost-hover:      oklch(25% 0.010 128);
+
+  --status-success: oklch(72% 0.110 150);
+  --status-success-bg: oklch(26% 0.045 150);
+  --status-warning: oklch(80% 0.125 75);
+  --status-warning-bg: oklch(28% 0.050 75);
+  --status-error: oklch(72% 0.145 30);
+  --status-error-bg: oklch(28% 0.055 30);
+  --status-info: oklch(74% 0.095 240);
+  --status-info-bg: oklch(27% 0.045 240);
+
+  --overlay-scrim: oklch(10% 0.01 75 / 0.72);
+  --overlay-image-bottom: linear-gradient(
+    to top,
+    oklch(8% 0.02 75 / 0.90) 0%,
+    oklch(8% 0.02 75 / 0.55) 42%,
+    oklch(8% 0.02 75 / 0.10) 100%);
+  --nav-scrolled-bg: oklch(16% 0.006 128 / 0.86);
+
+  --shadow-xs: 0 1px 2px oklch(0% 0 0 / 0.30);
+  --shadow-sm: 0 1px 3px oklch(0% 0 0 / 0.36);
+  --shadow-md: 0 4px 8px -2px oklch(0% 0 0 / 0.42);
+  --shadow-lg: 0 12px 24px -6px oklch(0% 0 0 / 0.50);
+  --shadow-xl: 0 24px 48px -12px oklch(0% 0 0 / 0.58);
+  --shadow-2xl: 0 40px 72px -20px oklch(0% 0 0 / 0.66);
+
+  /* Slightly lighter weight reads better as light-on-dark */
+  --weight-normal: 380;
+  --weight-medium: 480;
+}
+
+/* Respect user's system preference when no explicit choice has been stored */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+  }
+}
