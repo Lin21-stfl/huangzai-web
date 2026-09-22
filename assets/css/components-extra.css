@@ -242,25 +242,8 @@
 
 /* ==========================================================================
    STAYS · sidebar cards
+   (.stays-layout grid definition lives in pages.css — single source of truth)
    ========================================================================== */
-.stays-layout {
-  grid-template-columns: minmax(0, 1fr) 320px;
-}
-
-.stays-layout.is-map-mode {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr) 320px;
-}
-
-@media (max-width: 1200px) {
-  .stays-layout { grid-template-columns: minmax(0, 1fr) 290px; }
-  .stays-layout.is-map-mode { grid-template-columns: minmax(0, 1fr) 290px; }
-}
-
-@media (max-width: 1024px) {
-  .stays-layout,
-  .stays-layout.is-map-mode { grid-template-columns: 1fr; }
-}
-
 .stays-main {
   min-width: 0;
 }

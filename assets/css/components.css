@@ -12,6 +12,7 @@
   --btn-fg: currentColor;
   --btn-border: transparent;
   --btn-shadow: none;
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -155,10 +156,6 @@
   border-radius: 50%;
   color: var(--btn-fg);
   animation: spin 640ms linear infinite;
-}
-
-.btn {
-  position: relative;
 }
 
 @keyframes spin {
@@ -467,6 +464,7 @@
    3 · CARDS
    ========================================================================== */
 .card {
+  position: relative;
   display: flex;
   flex-direction: column;
   background: var(--surface-raised);
@@ -572,10 +570,6 @@
   margin-top: auto;
   padding-top: var(--space-4);
   border-top: 1px solid var(--border-subtle);
-}
-
-.card {
-  position: relative;
 }
 
 /* ==========================================================================

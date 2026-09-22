@@ -532,18 +532,28 @@
 /* ==========================================================================
    STAYS · list rows + map split
    ========================================================================== */
+/* Single source of truth for the stays grid. These rules used to be split
+   across this file and components-extra.css, where the later load order made
+   the values here dead code — one stray reorder would have broken the page. */
 .stays-layout {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr) 320px;
   gap: var(--space-8);
 }
 
 .stays-layout.is-map-mode {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr) 320px;
   align-items: start;
 }
 
+@media (max-width: 1200px) {
+  .stays-layout { grid-template-columns: minmax(0, 1fr) 290px; }
+
+  .stays-layout.is-map-mode { grid-template-columns: minmax(0, 1fr) 290px; }
+}
+
 @media (max-width: 1024px) {
+  .stays-layout,
   .stays-layout.is-map-mode { grid-template-columns: 1fr; }
 }
 

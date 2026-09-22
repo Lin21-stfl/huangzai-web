@@ -69,6 +69,10 @@
      ------------------------------------------------------------------ */
   function initDrawer(drawer) {
     if (!drawer) return null;
+    // Idempotent — one drawer is reachable both by the generic [.drawer] sweep
+    // and by a page-specific initialiser (#detailDrawer). Re-entering would
+    // double-bind the focus trap and the close handlers.
+    if (drawer.__hzDrawer) return drawer.__hzDrawer;
     const openers = document.querySelectorAll('[data-drawer-open="' + drawer.id + '"]');
     let lastFocused = null;
 
@@ -115,7 +119,9 @@
       }
     });
 
-    return { open: open, close: close };
+    const api = { open: open, close: close };
+    drawer.__hzDrawer = api;
+    return api;
   }
 
   function initDrawers() {
@@ -650,8 +656,8 @@
           row.style.transition = 'box-shadow 240ms ease';
           row.style.boxShadow = 'var(--shadow-xl), 0 0 0 2px var(--border-brand)';
           setTimeout(function () { row.style.boxShadow = ''; }, 1800);
-        } else if (window.HZ) {
-          window.HZ.toast('该住宿暂无列表条目，请切换到列表模式查看', { icon: '📍' });
+        } else {
+          toast('该住宿暂无列表条目，请切换到列表模式查看', { icon: '📍' });
         }
       });
     });
@@ -765,7 +771,7 @@
           const n = parseInt(counter.textContent, 10) || 0;
           counter.textContent = pressed ? Math.max(0, n - 1) : n + 1;
         }
-        toast(pressed ? '已取消' : '已' + (pressed ? '' : '') + btn.getAttribute('data-toggle-action'),
+        toast(pressed ? '已取消' : '已' + btn.getAttribute('data-toggle-action'),
           { icon: pressed ? '↩' : '✓' });
       });
     });
