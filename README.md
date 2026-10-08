@@ -92,6 +92,20 @@ python -m http.server 8000
 
 > 注：微信内置浏览器可能无法直接打开纯 IP 的局域网地址，正式测试请用已部署的 Pages 链接。
 
+## 部署更新
+
+站点托管在 GitHub Pages，推送后自动生效：
+
+```bash
+./push-github.sh
+```
+
+该脚本的存在是因为本机环境有两个坑会让普通 `git push` 静默挂起：存在透明代理导致 `github.com` 被解析到 `127.0.0.1`，且凭据助手链路会拉起文本编辑器等待保存。脚本会自动绕过这两点。首次使用需先完成浏览器授权：
+
+```bash
+git credential-manager github login --browser
+```
+
 ## 无障碍
 
 - WCAG 2.1 AA 级对比度
