@@ -1,0 +1,518 @@
+/* ==========================================================================
+   growth.css · 增长与互动层
+   --------------------------------------------------------------------------
+   承载三件事：让别人搜得到（数据条即传播素材）、让人愿意留言（标签化零打字
+   门槛 + 许愿池从众心理）、让人愿意再来（同好匹配与计数）。
+
+   约束：
+   · 只引用 tokens.css 的「语义层」令牌，不写任何硬编码色值 —— 深浅色主题
+     自动适配，本文件不含一行 [data-theme] 分支。
+   · 一切可点元素 ≥ 44×44px（含标签 chip 与点赞按钮）。
+   · 动效只动画 transform / opacity，且一律尊重 prefers-reduced-motion。
+   · 8pt 空间节奏，间距取自 --space-* 令牌。
+   ========================================================================== */
+
+/* ==========================================================================
+   1 · 实时数据条 —— 数字本身就是传播素材
+   ========================================================================== */
+
+.grow-ticker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-3) var(--space-5);
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-xs);
+}
+
+.grow-ticker__item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+  white-space: nowrap;
+}
+
+.grow-ticker__num {
+  font-family: var(--font-num);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--action-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.grow-ticker__sep {
+  width: 1px;
+  height: 18px;
+  background: var(--border-default);
+}
+
+/* 数字自增时的轻微强调，只用 transform，不触发重排 */
+.grow-ticker__num.is-bumped {
+  animation: grow-bump var(--duration-normal) var(--ease-out-quart);
+}
+
+@keyframes grow-bump {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.16); }
+  100% { transform: scale(1); }
+}
+
+/* 数据条所在的窄条带 —— 夹在快捷入口与线路推荐之间 */
+.grow-band {
+  padding-block: var(--space-6) 0;
+}
+
+/* ==========================================================================
+   2 · 布局骨架 —— 许愿池与留言器并排
+   ========================================================================== */
+
+.grow-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+@media (min-width: 900px) {
+  .grow-layout {
+    grid-template-columns: 1.02fr 0.98fr;
+    align-items: start;
+  }
+}
+
+/* ==========================================================================
+   3 · 许愿池滚动大屏 —— 从众心理
+   ========================================================================== */
+
+.grow-wall {
+  padding: var(--space-5);
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.grow-wall__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.grow-wall__title {
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
+}
+
+.grow-wall__count {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+}
+
+.grow-wall__count strong {
+  font-family: var(--font-num);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--action-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 上下渐隐，暗示内容在持续流动 */
+.grow-wall__viewport {
+  position: relative;
+  height: 336px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom,
+      transparent 0, #000 32px,
+      #000 calc(100% - 32px), transparent 100%);
+  mask-image: linear-gradient(to bottom,
+      transparent 0, #000 32px,
+      #000 calc(100% - 32px), transparent 100%);
+}
+
+.grow-wall__track {
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+}
+
+/* 两份内容之间不留 gap —— 组内末位补 padding，保证 translateY(-50%) 严丝合缝 */
+.grow-wall__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-bottom: var(--space-3);
+}
+
+.grow-wall__track.is-animated {
+  animation: grow-wall-scroll var(--grow-wall-duration, 48s) linear infinite;
+}
+
+.grow-wall:hover .grow-wall__track.is-animated,
+.grow-wall:focus-within .grow-wall__track.is-animated {
+  animation-play-state: paused;
+}
+
+@keyframes grow-wall-scroll {
+  from { transform: translateY(0); }
+  to { transform: translateY(-50%); }
+}
+
+/* ---- 单条留言 ---- */
+
+.grow-wish {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.grow-wish--official {
+  background: var(--surface-brand-soft);
+  border-color: var(--border-brand);
+}
+
+.grow-wish--mine {
+  border-color: var(--border-brand);
+  box-shadow: var(--shadow-xs);
+}
+
+.grow-wish__emoji {
+  flex: 0 0 auto;
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+.grow-wish__body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.grow-wish__text {
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.grow-wish--official .grow-wish__text {
+  color: var(--text-strong);
+}
+
+.grow-wish__extra {
+  margin-top: var(--space-1);
+  font-size: var(--text-xs);
+  line-height: var(--leading-normal);
+  color: var(--text-tertiary);
+  overflow-wrap: anywhere;
+}
+
+.grow-wish__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  flex-wrap: wrap;
+}
+
+.grow-wish__name {
+  font-family: var(--font-num);
+  color: var(--text-tertiary);
+}
+
+.grow-wish__reply-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-full);
+  background: var(--surface-brand-soft);
+  color: var(--text-link);
+  font-weight: var(--weight-medium);
+}
+
+.grow-wish__like {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 32px;
+  padding: 0 var(--space-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-num);
+  font-size: var(--text-xs);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-out-quart),
+    color var(--duration-fast) var(--ease-out-quart),
+    transform var(--duration-instant) var(--ease-out-quart);
+}
+
+.grow-wish__like:hover {
+  background: var(--action-ghost-hover);
+  color: var(--text-secondary);
+}
+
+.grow-wish__like:active {
+  transform: scale(0.95);
+}
+
+.grow-wish__like[aria-pressed='true'] {
+  background: var(--surface-accent-soft);
+  color: var(--text-price);
+  font-weight: var(--weight-semibold);
+}
+
+.grow-wish__like:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   4 · 标签化留言器 —— 零打字门槛
+   ========================================================================== */
+
+.grow-compose {
+  padding: var(--space-5);
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.grow-compose__lead {
+  margin-bottom: var(--space-4);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--text-secondary);
+}
+
+.grow-compose__tags {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+  gap: var(--space-2);
+}
+
+.grow-tag {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 48px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  text-align: left;
+  cursor: pointer;
+  transition: transform var(--duration-fast) var(--ease-out-quart),
+    background-color var(--duration-fast) var(--ease-out-quart),
+    border-color var(--duration-fast) var(--ease-out-quart);
+}
+
+.grow-tag__emoji {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.grow-tag:hover {
+  background: var(--action-ghost-hover);
+  transform: translateY(-1px);
+}
+
+.grow-tag:active {
+  transform: scale(0.97);
+}
+
+.grow-tag[aria-pressed='true'] {
+  border-color: var(--border-brand);
+  background: var(--surface-brand-soft);
+  color: var(--text-strong);
+  font-weight: var(--weight-semibold);
+}
+
+.grow-tag:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+/* ---- 预览句：全站统一引导文案 ---- */
+
+.grow-compose__preview {
+  margin-top: var(--space-4);
+  padding: var(--space-4);
+  border: 1px dashed var(--border-brand);
+  border-radius: var(--radius-md);
+  background: var(--surface-brand-soft);
+}
+
+.grow-compose__sentence {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-snug);
+  color: var(--text-strong);
+}
+
+.grow-compose__sentence.is-empty {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-normal);
+  color: var(--text-tertiary);
+}
+
+.grow-compose__match {
+  margin-top: var(--space-2);
+  font-size: var(--text-xs);
+  line-height: var(--leading-normal);
+  color: var(--text-tertiary);
+}
+
+.grow-compose__match strong {
+  font-family: var(--font-num);
+  color: var(--action-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- 补充信息行 ---- */
+
+.grow-compose__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.grow-compose__row .input {
+  flex: 1 1 176px;
+  min-height: 44px;
+}
+
+.grow-compose__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.grow-compose__actions .btn {
+  flex: 1 1 160px;
+}
+
+.grow-compose__hint {
+  margin-top: var(--space-3);
+  font-size: var(--text-xs);
+  line-height: var(--leading-normal);
+  color: var(--text-muted);
+}
+
+/* ---- 留言成功后的仪式感 ---- */
+
+.grow-done {
+  margin-top: var(--space-4);
+  padding: var(--space-4);
+  border: 1px solid var(--border-brand);
+  border-radius: var(--radius-md);
+  background: var(--surface-brand-soft);
+  animation: grow-pop var(--duration-normal) var(--ease-out-expo);
+}
+
+@keyframes grow-pop {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.grow-done__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  color: var(--text-strong);
+}
+
+.grow-done__text {
+  margin-top: var(--space-2);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--text-secondary);
+}
+
+.grow-done__no {
+  font-family: var(--font-num);
+  font-weight: var(--weight-bold);
+  color: var(--action-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.grow-done__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+/* ==========================================================================
+   5 · 降级：尊重系统的「减少动效」
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .grow-wall__track.is-animated {
+    animation: none;
+  }
+
+  .grow-wall__viewport {
+    height: auto;
+    max-height: 336px;
+    overflow-y: auto;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .grow-ticker__num.is-bumped {
+    animation: none;
+  }
+}
+
+/* ==========================================================================
+   6 · 小屏收敛
+   ========================================================================== */
+
+@media (max-width: 560px) {
+  .grow-wall,
+  .grow-compose {
+    padding: var(--space-4);
+  }
+
+  .grow-wall__viewport {
+    height: 288px;
+  }
+
+  .grow-compose__tags {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .grow-ticker {
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-4);
+  }
+}

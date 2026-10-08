@@ -1,0 +1,281 @@
+/* ==========================================================================
+   identity.css · 政务识别层
+   --------------------------------------------------------------------------
+   主张：不做政务模板，做「海拔线的官方图志」。
+   正规感不来自蓝色渐变和红旗，而来自三件事 —— 信息完整（来源、时效、责任
+   主体、联系方式）、排版纪律（统一的字距与层级）、克制的用色。
+   独特感不来自装饰，而来自一个只属于黄磜的母题：海拔 560 米的等高线。
+
+   本文件只做「加法」：新增部件与变量，不覆盖既有组件，避免破坏原设计系统
+   已经验证过的对比度与布局。
+   ========================================================================== */
+
+:root {
+  /* 松墨绿 —— 政务权威底色，取自茶园最深处那一层绿 */
+  --gov-ink: oklch(24.5% 0.038 152);
+  --gov-ink-soft: oklch(31% 0.034 152);
+  --gov-ink-line: oklch(38% 0.030 152);
+
+  /* 纸马朱 —— 只给非遗与节庆，克制才有分量 */
+  --seal-red: oklch(52% 0.155 30);
+
+  /* 宣纸白 —— 纸感底色，比纯白多一点温度 */
+  --paper: oklch(97.6% 0.010 85);
+
+  /* 主行动色下沉一档：政务的庄重来自更沉的绿，不是更亮的绿。
+     只改语义层，深色模式仍由 tokens.css 的 :root[data-theme] 接管。 */
+  --action-primary: oklch(33.5% 0.062 145);
+  --action-primary-hover: oklch(27% 0.055 145);
+  --action-primary-active: oklch(21.5% 0.048 145);
+}
+
+:root[data-theme='dark'] {
+  --gov-ink: oklch(17% 0.028 152);
+  --gov-ink-soft: oklch(23% 0.030 152);
+  --gov-ink-line: oklch(42% 0.032 152);
+  --seal-red: oklch(66% 0.140 30);
+}
+
+/* ==========================================================================
+   1 · 政务热线入口 —— 官方站最直白的可信信号
+   ========================================================================== */
+
+.gov-hotline {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 40px;
+  padding: 0 var(--space-3);
+  border: 1px solid oklch(100% 0 0 / 0.45);
+  border-radius: var(--radius-full);
+  color: oklch(99% 0 0 / 0.92);
+  font-family: var(--font-num);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color var(--duration-fast) var(--ease-out-quart),
+    border-color var(--duration-fast) var(--ease-out-quart),
+    color var(--duration-fast) var(--ease-out-quart);
+}
+
+.gov-hotline:hover {
+  background: oklch(100% 0 0 / 0.16);
+  border-color: oklch(100% 0 0 / 0.75);
+  color: oklch(100% 0 0);
+}
+
+.gov-hotline:focus-visible {
+  outline: 2px solid oklch(100% 0 0);
+  outline-offset: 2px;
+}
+
+/* 导航吸顶后切回深色字 */
+.navbar.is-scrolled .gov-hotline,
+.navbar--solid .gov-hotline {
+  border-color: var(--border-default);
+  color: var(--tea-800);
+}
+
+.navbar.is-scrolled .gov-hotline:hover,
+.navbar--solid .gov-hotline:hover {
+  background: var(--action-ghost-hover);
+  border-color: var(--border-strong);
+  color: var(--text-strong);
+}
+
+.gov-hotline__num {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 900px) {
+  .gov-hotline__num {
+    display: none;
+  }
+
+  .gov-hotline {
+    padding: 0 var(--space-2);
+  }
+}
+
+/* ==========================================================================
+   2 · 等高线分隔 —— 全站母题，来自「平均海拔 560 米」
+   ========================================================================== */
+
+.contour {
+  position: relative;
+  height: 52px;
+  margin-block: calc(var(--space-10) * -1);
+  color: var(--tea-600);
+  opacity: 0.42;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.contour svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.contour path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}
+
+.contour--dense {
+  opacity: 0.3;
+}
+
+@media (max-width: 640px) {
+  .contour {
+    height: 38px;
+    margin-block: calc(var(--space-8) * -1);
+  }
+}
+
+/* ==========================================================================
+   3 · 海拔徽标 —— 数据与地理身份合一
+   ========================================================================== */
+
+/* 徽标行：夹在标语与主标题之间，不抢标题的戏 */
+.hero__badges {
+  margin-bottom: var(--space-3);
+}
+
+.alt-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid oklch(100% 0 0 / 0.42);
+  border-radius: var(--radius-full);
+  background: oklch(18% 0.02 152 / 0.38);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  color: oklch(98% 0 0);
+  font-family: var(--font-num);
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+}
+
+.alt-badge__unit {
+  opacity: 0.72;
+}
+
+.alt-badge__rule {
+  width: 1px;
+  height: 11px;
+  background: oklch(100% 0 0 / 0.4);
+}
+
+/* ==========================================================================
+   4 · 信息规范条 —— 政府站的正规感，本质是信息完整
+   ========================================================================== */
+
+.spec-bar {
+  border-top: 3px solid var(--seal-red);
+  background: var(--gov-ink);
+  color: oklch(95% 0.012 152);
+  padding-block: var(--space-10) var(--space-8);
+}
+
+.spec-bar__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5) var(--space-6);
+}
+
+@media (min-width: 700px) {
+  .spec-bar__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1100px) {
+  .spec-bar__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.spec-bar__k {
+  display: block;
+  margin-bottom: var(--space-2);
+  color: oklch(78% 0.045 152);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.18em;
+}
+
+.spec-bar__v {
+  display: block;
+  color: oklch(96% 0.010 152);
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+
+.spec-bar__v a {
+  color: oklch(96% 0.010 152);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.spec-bar__v a:hover {
+  color: oklch(100% 0 0);
+}
+
+/* 规范条里的注记行：小一号、低一档 */
+.spec-bar__note {
+  margin-top: var(--space-6);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--gov-ink-line);
+  color: oklch(78% 0.030 152);
+  font-size: var(--text-xs);
+  line-height: var(--leading-relaxed);
+}
+
+/* ==========================================================================
+   5 · 排版纪律 —— 章节眉标统一加刻度短线
+   ========================================================================== */
+
+.section-head__eyebrow {
+  letter-spacing: 0.18em;
+}
+
+.section-head__eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 1px;
+  margin-right: var(--space-2);
+  vertical-align: middle;
+  background: currentColor;
+  opacity: 0.5;
+}
+
+/* 页面主标题下的属地行 —— 一眼看到「这是哪里、归谁管」 */
+.page-head__origin {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+}
+
+.page-head__origin span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gov-hotline {
+    transition: none;
+  }
+}

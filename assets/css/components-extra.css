@@ -122,6 +122,7 @@
 }
 
 .price-slider__value {
+  display: inline-block;
   min-width: 8.5ch;
   font-family: var(--font-num);
   font-size: var(--text-sm);
@@ -129,6 +130,18 @@
   color: var(--text-price);
   font-variant-numeric: tabular-nums;
   text-align: right;
+  transform-origin: right center;
+}
+
+/* 价格变化的即时反馈 —— 拖动时必须一眼看到数字动了 */
+@keyframes pricePulse {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.09); }
+  100% { transform: scale(1); }
+}
+
+.price-slider__value.is-pulse {
+  animation: pricePulse 240ms var(--ease-out-quart);
 }
 
 /* Track fill is painted with a gradient driven by --range-fill (set in JS) */
@@ -146,36 +159,84 @@
     var(--surface-muted) 100%);
   border-radius: var(--radius-full);
   cursor: pointer;
+  transition: height var(--duration-fast) var(--ease-out-quart);
+}
+
+/* 按住时轨道加粗 —— 手指按住的那一刻必须看得见 */
+.price-slider.is-dragging .range {
+  height: 6px;
 }
 
 .price-slider .range::-webkit-slider-thumb {
   appearance: none;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   background: var(--surface-raised);
-  border: 2px solid var(--action-primary);
+  border: 2.5px solid var(--action-primary);
   border-radius: var(--radius-full);
   box-shadow: var(--shadow-sm);
-  transition: transform var(--duration-fast) var(--ease-out-quart);
+  cursor: grab;
+  transition:
+    transform var(--duration-fast) var(--ease-out-quart),
+    box-shadow var(--duration-fast) var(--ease-out-quart);
 }
 
 .price-slider .range::-webkit-slider-thumb:hover {
-  transform: scale(1.14);
+  transform: scale(1.12);
+}
+
+.price-slider .range:active::-webkit-slider-thumb,
+.price-slider.is-dragging .range::-webkit-slider-thumb {
+  transform: scale(1.2);
+  box-shadow: 0 0 0 7px var(--surface-brand-soft), var(--shadow-md);
+  cursor: grabbing;
 }
 
 .price-slider .range::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   background: var(--surface-raised);
-  border: 2px solid var(--action-primary);
+  border: 2.5px solid var(--action-primary);
   border-radius: var(--radius-full);
   box-shadow: var(--shadow-sm);
+  cursor: grab;
+  transition:
+    transform var(--duration-fast) var(--ease-out-quart),
+    box-shadow var(--duration-fast) var(--ease-out-quart);
+}
+
+.price-slider.is-dragging .range::-moz-range-thumb {
+  transform: scale(1.2);
+  box-shadow: 0 0 0 7px var(--surface-brand-soft), var(--shadow-md);
+}
+
+/* 自定义外观后浏览器默认焦点环会消失，这里补回来 */
+.price-slider .range:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 8px;
+  border-radius: var(--radius-full);
 }
 
 /* Enlarge the hit area without changing the visual size */
 .price-slider .range::-webkit-slider-runnable-track {
   height: 20px;
   background: transparent;
+}
+
+/* ==========================================================================
+   FILTER RESULTS · 入场过渡
+   过滤结果的显隐原本是瞬间的 —— 给「变为可见」的卡片一个短促的上浮淡入，
+   按出现顺序错开 28ms，让一次性出现十几张卡片时不至于整屏炸开。
+   隐藏保持瞬间：延迟移除会让快速连点筛选时卡片互相压叠。
+   ========================================================================== */
+
+@keyframes filterItemIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+[data-filter-item].is-filter-in {
+  animation: filterItemIn 240ms var(--ease-out-quart) both;
 }
 
 /* ==========================================================================

@@ -341,6 +341,7 @@
 
     function applyAll() {
       const items = document.querySelectorAll('[data-filter-item]');
+      let entering = 0;
 
       items.forEach(function (item) {
         const tags = (item.getAttribute('data-tags') || '')
@@ -364,8 +365,19 @@
         });
 
         const visible = matchesQuery && matchesPrice && matchesGroups;
+        const wasVisible = !item.hidden;
+
         item.hidden = !visible;
         item.style.display = visible ? '' : 'none';
+
+        // 只在「由隐转显」时播放入场动画，并让同批出现的卡片依次错开
+        if (visible && !wasVisible) {
+          item.style.animationDelay = (entering * 28) + 'ms';
+          item.classList.remove('is-filter-in');
+          void item.offsetWidth;
+          item.classList.add('is-filter-in');
+          entering++;
+        }
       });
 
       updateCount();
@@ -521,6 +533,8 @@
     const slider = document.querySelector('[data-price-input]');
     if (!slider) return;
     const output = document.querySelector('[data-price-output]');
+    const wrap = slider.closest('[data-price-range]') || slider.parentElement;
+    let lastShown = null;
 
     // Read from the attribute when the DOM property is unavailable or stale
     function attrNum(name, fallback) {
@@ -536,7 +550,17 @@
 
     function paint() {
       const v = attrNum('value', max);
-      if (output) output.textContent = '¥' + min + ' – ¥' + v;
+      if (output) {
+        const next = '¥' + min + ' – ¥' + v;
+        if (output.textContent !== next) {
+          output.textContent = next;
+          // 数字必须即时跟上手指，所以不做滚动动画，只做一次脉冲
+          output.classList.remove('is-pulse');
+          void output.offsetWidth;
+          output.classList.add('is-pulse');
+        }
+        lastShown = v;
+      }
       const span = max - min;
       const pct = span > 0 ? ((v - min) / span) * 100 : 100;
       if (slider.style && slider.style.setProperty) {
@@ -546,8 +570,32 @@
       if (window.__hzApplyFilters) window.__hzApplyFilters();
     }
 
-    slider.addEventListener('input', paint);
+    // input 事件在拖动中高频触发，用 rAF 合帧，避免每个像素位移都重排一次列表
+    let raf = null;
+    function schedulePaint() {
+      if (raf) return;
+      raf = requestAnimationFrame(function () {
+        raf = null;
+        paint();
+      });
+    }
+
+    slider.addEventListener('input', schedulePaint);
     slider.addEventListener('change', paint);
+
+    /* 按住 / 松手：给拇指和轨道一个明确的「正在操作」状态 */
+    function press() { wrap.classList.add('is-dragging'); }
+    function release() { wrap.classList.remove('is-dragging'); }
+    slider.addEventListener('pointerdown', press);
+    slider.addEventListener('pointerup', release);
+    slider.addEventListener('pointercancel', release);
+    slider.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' ||
+        e.key === 'ArrowUp' || e.key === 'ArrowDown') press();
+    });
+    slider.addEventListener('keyup', release);
+    slider.addEventListener('blur', release);
+
     paint();
   }
 
