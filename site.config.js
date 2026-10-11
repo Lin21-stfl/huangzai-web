@@ -64,7 +64,7 @@ window.HZ_SITE = {
   comment: {
     provider: 'twikoo',
     // 腾讯云 CloudBase 环境 ID（tcb-xxxxxxxx）。留空 = 自动回落本地模式
-    twikooEnvId: '在此填入腾讯云 CloudBase 的 envId'
+    twikooEnvId: 'huangzai-d0gzjvr5y01a0522f'
   },
 
   /* ------------------------------------------------------------------

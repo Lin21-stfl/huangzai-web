@@ -1,0 +1,14 @@
+{
+  "envId": "{{替换为你的真实envId，如 cloud1-9gixxxxxxxxxxx}}",
+  "functionRoot": "./",
+  "functions": [
+    {
+      "name": "twikoo",
+      "runtime": "Nodejs16.13",
+      "memorySize": 128,
+      "timeout": 60,
+      "handler": "index.main",
+      "installDependency": true
+    }
+  ]
+}
