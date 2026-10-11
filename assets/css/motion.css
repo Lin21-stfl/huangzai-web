@@ -1,0 +1,477 @@
+/* ==========================================================================
+   motion.css · 全站动效规范层（唯一动效真源）
+   --------------------------------------------------------------------------
+   这一层收敛三件事：
+     1. 动效令牌 —— 时长 / 缓动 / 位移 / 缩放 / 交错步长，组件里禁止再写死数值。
+     2. 执行档位 —— 由 motion.js 探测设备与实时帧率，写在 <html data-motion-tier>，
+                    高档全量、低档（移动端 / 弱机 / 省流量）自动降级、off 档只留
+                    基础反馈。
+     3. 关键帧与优先级 —— 高优先级（点击 / 弹窗 / 抽屉 / toast）任何档位都在；
+                    低优先级（滚动入场、装饰漂移、跑马灯）在低档自动关闭。
+
+   动效只碰 transform / opacity / box-shadow 三个合成属性，一律避开会触发
+   重排的 width / height / top / left / margin。
+   ========================================================================== */
+
+/* ==========================================================================
+   1 · 令牌
+   ========================================================================== */
+:root {
+  /* ---- 缓动：全站只有三条，杜绝各组件自定义曲线造成节奏不统一 ---- */
+  --m-ease-out:      cubic-bezier(0.22, 0.61, 0.36, 1);   /* 标准减速：进出场 */
+  --m-ease-emphasis: cubic-bezier(0.16, 1, 0.3, 1);       /* 强调：弹窗、抽屉 */
+  --m-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);        /* 对称：颜色、尺寸 */
+
+  /* ---- 时长：五档 ---- */
+  --m-dur-instant:  90ms;    /* 按压、hover 反馈 */
+  --m-dur-fast:     160ms;   /* 颜色 / 阴影切换 */
+  --m-dur-base:     240ms;   /* 常规入场、toast */
+  --m-dur-slow:     360ms;   /* 抽屉、弹窗 */
+  --m-dur-emphasis: 460ms;   /* 强调入场（成功卡片） */
+
+  /* ---- 位移：统一小位移，杜绝大跳 ---- */
+  --m-shift-xs: 2px;
+  --m-shift-sm: 4px;
+  --m-shift-md: 10px;
+  --m-shift-lg: 18px;
+
+  /* ---- 缩放：极轻微 ---- */
+  --m-scale-tap:   0.975;
+  --m-scale-enter: 0.985;
+
+  /* ---- 交错：同批元素依次出场 ---- */
+  --m-stagger: 34ms;
+
+  /* ---- 全局倍率：由 motion.js 按档位写 <html data-motion-tier> ---- */
+  --m-scale: 1;
+
+  /* 派生时长 —— 组件只准用这几个 */
+  --m-t-instant:  calc(var(--m-dur-instant) * var(--m-scale));
+  --m-t-fast:     calc(var(--m-dur-fast) * var(--m-scale));
+  --m-t-base:     calc(var(--m-dur-base) * var(--m-scale));
+  --m-t-slow:     calc(var(--m-dur-slow) * var(--m-scale));
+  --m-t-emphasis: calc(var(--m-dur-emphasis) * var(--m-scale));
+}
+
+/* ---- 移动端：位移量收一半，避免小屏上看起来「跳」 ---- */
+@media (max-width: 768px) {
+  :root {
+    --m-shift-md: 6px;
+    --m-shift-lg: 12px;
+    --m-stagger: 24ms;
+  }
+}
+
+/* ==========================================================================
+   2 · 执行档位
+   ========================================================================== */
+
+/* 弱机 / 移动端 / 省流量：时长压缩，交错取消，装饰动画全关 */
+:root[data-motion-tier='low'] {
+  --m-scale: 0.72;
+  --m-stagger: 0ms;
+  --m-shift-sm: 2px;
+  --m-shift-md: 4px;
+  --m-shift-lg: 8px;
+}
+
+/* 系统「减弱动画」或探测到持续掉帧：只保留基础反馈（颜色、透明度） */
+:root[data-motion-tier='off'] {
+  --m-scale: 0;
+  --m-stagger: 0ms;
+}
+
+/* ==========================================================================
+   3 · 关键帧（全站共用的全部动画都在这里）
+   ========================================================================== */
+
+@keyframes m-fade-up {
+  from { opacity: 0; transform: translate3d(0, var(--m-shift-md), 0); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes m-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes m-pop-in {
+  from { opacity: 0; transform: scale(var(--m-scale-enter)) translate3d(0, var(--m-shift-sm), 0); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes m-pop-out {
+  from { opacity: 1; transform: none; }
+  to   { opacity: 0; transform: scale(var(--m-scale-enter)) translate3d(0, var(--m-shift-xs), 0); }
+}
+
+@keyframes m-toast-in {
+  from { opacity: 0; transform: translate3d(0, var(--m-shift-lg), 0) scale(0.96); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes m-toast-out {
+  from { opacity: 1; transform: none; }
+  to   { opacity: 0; transform: translate3d(0, var(--m-shift-sm), 0) scale(0.98); }
+}
+
+/* 数值变化的一次强调，只动 transform，不触发重排 */
+@keyframes m-bump {
+  0%   { transform: none; }
+  38%  { transform: scale(1.12); }
+  100% { transform: none; }
+}
+
+@keyframes m-pulse {
+  0%   { transform: none; }
+  45%  { transform: scale(1.08); }
+  100% { transform: none; }
+}
+
+/* 深链定位：先扩散一圈，再收成一条常驻描边 */
+@keyframes m-highlight {
+  0%   { box-shadow: 0 0 0 0 var(--border-brand); }
+  45%  { box-shadow: 0 0 0 7px transparent; }
+  100% { box-shadow: 0 0 0 2px var(--border-brand); }
+}
+
+@keyframes m-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes m-shimmer {
+  to { transform: translateX(100%); }
+}
+
+/* ---- 以下为低优先级装饰动画，低档位会被关掉 ---- */
+@keyframes m-drift {
+  from { transform: scale(1.02) translate3d(0, 0, 0); }
+  to   { transform: scale(1.09) translate3d(-1.2%, -1%, 0); }
+}
+
+@keyframes m-progress {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@keyframes m-scroll-pulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
+  50%      { opacity: 1;   transform: scaleY(1); }
+}
+
+@keyframes m-marquee {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-50%); }
+}
+
+/* ==========================================================================
+   4 · 通用执行类（JS 通过 HZMotion.once / enter / exit 挂载）
+   ========================================================================== */
+
+.m-fade-up  { animation: m-fade-up  var(--m-t-base) var(--m-ease-out) both; }
+.m-fade-in  { animation: m-fade-in  var(--m-t-base) var(--m-ease-out) both; }
+.m-pop-in   { animation: m-pop-in   var(--m-t-base) var(--m-ease-emphasis) both; }
+.m-pop-out  { animation: m-pop-out  var(--m-t-fast) var(--m-ease-out) both; }
+.m-bump     { animation: m-bump     var(--m-t-base) var(--m-ease-out) both; }
+.m-pulse    { animation: m-pulse    var(--m-t-base) var(--m-ease-out) both; }
+.m-highlight{ animation: m-highlight var(--m-t-emphasis) var(--m-ease-out) both; }
+
+/* 元素销毁前的收尾态：收完才从 DOM 移除，杜绝「半截动画残留在屏上」 */
+.m-exiting  { animation: m-pop-out var(--m-t-fast) var(--m-ease-out) both; }
+.m-exiting--fade { animation: m-fade-in var(--m-t-fast) var(--m-ease-out) reverse both; }
+
+/* 加载态：按钮 / 面板通用转圈 */
+.m-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: m-spin 640ms linear infinite;
+}
+
+/* 非 .btn 元素的加载态（转发按钮等）：内容压暗 + 中心转圈 */
+[data-busy='1'] {
+  position: relative;
+  pointer-events: none;
+}
+
+[data-busy='1'] > * {
+  opacity: 0.3;
+}
+
+[data-busy='1']::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: m-spin 640ms linear infinite;
+}
+
+/* ==========================================================================
+   5 · 交互反馈统一（高优先级：任何档位都保留）
+   ========================================================================== */
+
+.btn,
+.chip,
+.grow-tag,
+.grow-wish__like,
+.grow-wish__share,
+.map-pin,
+.filter-chip,
+.segmented__btn,
+.to-top {
+  transition-property: background-color, border-color, color, box-shadow, opacity, transform;
+  transition-duration: var(--m-t-fast);
+  transition-timing-function: var(--m-ease-out);
+}
+
+/* 按压：轻微缩放 + 阴影回收，不做位移大跳 */
+.btn:active:not(:disabled),
+.chip:active:not(:disabled),
+.grow-tag:active,
+.grow-wish__like:active,
+.grow-wish__share:active:not(:disabled),
+.segmented__btn:active {
+  transform: scale(var(--m-scale-tap));
+  transition-duration: var(--m-t-instant);
+}
+
+/* JS 触发的按压态（键盘 Enter / 程序化点击） */
+.is-pressed {
+  transform: scale(var(--m-scale-tap));
+  transition-duration: var(--m-t-instant);
+}
+
+/* 卡片 hover：抬起 2px + 阴影加深，位移收敛到极小 */
+.card:hover,
+.attr-card:hover,
+.exp-card:hover,
+.stay-card:hover,
+.guide-card:hover {
+  transition-duration: var(--m-t-base);
+}
+
+/* 焦点环始终保留，只是让它淡入而不是硬闪 */
+:focus-visible {
+  transition: box-shadow var(--m-t-instant) var(--m-ease-out);
+}
+
+/* ==========================================================================
+   6 · 滚动入场（低优先级：低档位取消位移，只留淡入）
+   ========================================================================== */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, var(--m-shift-lg), 0);
+  transition:
+    opacity var(--m-t-slow) var(--m-ease-out),
+    transform var(--m-t-slow) var(--m-ease-out);
+  transition-delay: var(--m-reveal-delay, 0ms);
+  /* 不给几十个入场元素常驻 will-change：那会在移动端堆出同样多的合成层。
+     transform / opacity 本身就会被浏览器提升，不需要提前声明。 */
+  will-change: auto;
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+:root[data-motion-tier='low'] [data-reveal] {
+  transform: none;
+  transition: opacity var(--m-t-base) var(--m-ease-out);
+}
+
+:root[data-motion-tier='off'] [data-reveal] {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+/* ==========================================================================
+   7 · 弹窗 / 抽屉（高优先级：保证任何档位都完整播完）
+   ========================================================================== */
+
+.modal__box,
+.drawer__panel {
+  transition-duration: var(--m-t-slow);
+  transition-timing-function: var(--m-ease-emphasis);
+}
+
+.modal,
+.drawer {
+  transition-duration: var(--m-t-slow);
+}
+
+/* 关闭：先播收尾动画，播完 JS 才摘掉 is-open（避免抽屉瞬间消失） */
+.drawer.is-closing .drawer__scrim { opacity: 0; }
+.drawer.is-closing .drawer__panel { transform: translateX(100%); }
+.modal.is-closing { opacity: 0; }
+.modal.is-closing .modal__box { transform: translateY(12px) scale(0.98); }
+
+.drawer.is-open .drawer__panel,
+.modal.is-open .modal__box {
+  will-change: transform;
+}
+
+/* ==========================================================================
+   8 · 收敛既有关键帧，统一走 m-* 令牌
+   ========================================================================== */
+
+/* toast */
+.toast {
+  animation: m-toast-in var(--m-t-base) var(--m-ease-emphasis);
+}
+
+.toast.is-leaving {
+  animation: m-toast-out var(--m-t-fast) var(--m-ease-out) forwards;
+}
+
+/* 按钮加载圈 */
+.btn.is-loading::after {
+  animation: m-spin 640ms linear infinite;
+}
+
+/* 骨架屏 */
+.skeleton::after {
+  animation: m-shimmer 1.6s var(--m-ease-standard) infinite;
+}
+
+/* 价格滑块即时反馈 */
+.price-slider__value.is-pulse,
+[data-price-output].is-pulse {
+  animation: m-pulse var(--m-t-fast) var(--m-ease-out);
+}
+
+/* 数字自增 */
+.grow-ticker__num.is-bumped,
+.is-bumped {
+  animation: m-bump var(--m-t-base) var(--m-ease-out);
+}
+
+/* 筛选结果入场 —— 由 app.js 统一调用 HZMotion.stagger */
+[data-filter-item].is-filter-in {
+  animation: m-fade-up var(--m-t-base) var(--m-ease-out) both;
+  animation-delay: var(--m-delay, 0ms);
+}
+
+/* 成功卡片 */
+.grow-done {
+  animation: m-pop-in var(--m-t-emphasis) var(--m-ease-emphasis);
+}
+
+/* 留言卡新增入场 / 移除收尾 */
+.grow-wish.is-entering {
+  animation: m-pop-in var(--m-t-base) var(--m-ease-emphasis) both;
+}
+
+.grow-wish.is-leaving {
+  animation: m-pop-out var(--m-t-fast) var(--m-ease-out) both;
+  pointer-events: none;
+}
+
+/* 深链命中 */
+.grow-wish.is-focused {
+  animation: m-highlight var(--m-t-emphasis) var(--m-ease-out) both;
+}
+
+/* 地图定位 / 锚点命中：常驻描边一段时间，由 HZMotion.once 自动摘除 */
+.is-targeted {
+  box-shadow: 0 0 0 2px var(--border-brand), var(--shadow-lg);
+}
+
+/* ---- 装饰动画换用 m-* 关键帧 ---- */
+.hero__slide img                  { animation: m-drift 22s var(--m-ease-standard) infinite alternate; }
+.hero__dot[aria-selected='true']::before { animation: m-progress 7s linear; }
+.hero__scroll-line                { animation: m-scroll-pulse 2.4s var(--m-ease-standard) infinite; }
+.grow-wall__track.is-animated     { animation: m-marquee var(--grow-wall-duration, 48s) linear infinite; }
+
+/* ==========================================================================
+   9 · 低优先级降级 —— 弱机 / 移动端关掉装饰动画
+   ========================================================================== */
+
+:root[data-motion-tier='low'] .hero__slide img,
+:root[data-motion-tier='low'] .hero__scroll-line {
+  animation: none;
+}
+
+/* 跑马灯在低档改为可滚动容器，省掉一条常驻 transform 动画 */
+:root[data-motion-tier='low'] .grow-wall__track.is-animated {
+  animation: none;
+}
+
+:root[data-motion-tier='low'] .grow-wall__viewport {
+  height: auto;
+  max-height: 336px;
+  overflow-y: auto;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+/* 页面切到后台：装饰动画全部暂停，回来再续 */
+:root[data-motion-hidden='1'] .hero__slide img,
+:root[data-motion-hidden='1'] .hero__scroll-line,
+:root[data-motion-hidden='1'] .grow-wall__track.is-animated,
+:root[data-motion-hidden='1'] .skeleton::after,
+:root[data-motion-hidden='1'] .hero__dot[aria-selected='true']::before {
+  animation-play-state: paused;
+}
+
+/* 卡片 hover 的位移在触摸设备上没有意义，直接免掉合成层开销 */
+@media (hover: none) {
+  .card:hover,
+  .attr-card:hover,
+  .exp-card:hover,
+  .stay-card:hover,
+  .guide-card:hover {
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   10 · 兜底：系统「减弱动画」优先级最高
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__slide img,
+  .hero__scroll-line,
+  .grow-wall__track.is-animated,
+  .skeleton::after,
+  .grow-ticker__num.is-bumped {
+    animation: none;
+  }
+
+  .grow-wall__viewport {
+    height: auto;
+    max-height: 336px;
+    overflow-y: auto;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .btn:active:not(:disabled),
+  .chip:active:not(:disabled),
+  .grow-tag:active,
+  .is-pressed {
+    transform: none;
+  }
+
+  /* 保留基础反馈：颜色 / 透明度变化仍在，只是没有位移与缩放 */
+  .toast {
+    animation: m-fade-in var(--m-t-instant) linear;
+  }
+}

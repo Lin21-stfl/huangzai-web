@@ -31,12 +31,53 @@
   /* 上线前替换为真实域名 —— 微信分享卡片与 og:image 必须是绝对地址 */
   var SITE_ORIGIN = CFG.origin || 'https://lin21-stfl.github.io/huangzai-web/';
 
-  /* 线上累计基数：本地增量叠加在它之上，让演示数字不至于从 0 开始 */
+  /* 线上累计基数：全部从 0 开始 —— 不预置任何虚构流量，
+     真实数据由百度统计（site.config.js 的 analytics.id）接入后回填 */
   var BASE = {
-    visits: 12345,
-    comments: 678,
-    shares: 2341
+    visits: 0,        // 从0开始真实累计
+    comments: 0,      // 从0开始真实累计
+    shares: 0         // 从0开始真实累计
   };
+
+  /* 统计起点说明：展示在访问量数字下方 */
+  var STATS_SINCE = '数据自2026年7月起统计';
+
+  /* 百度统计站点 ID 占位串 —— 未替换时不注入脚本，避免上报到错误站点 */
+  var ANALYTICS_PLACEHOLDER = /填入|YOUR_|TODO|xxx/i;
+
+  function analyticsReady() {
+    var a = CFG.analytics || {};
+    if (a.provider !== 'baidu') return false;
+    return !!a.id && !ANALYTICS_PLACEHOLDER.test(a.id);
+  }
+
+  /* 注入百度统计；站内跳转（SPA）手动补一次 PV */
+  function injectAnalytics() {
+    if (!analyticsReady()) return;
+    window._hmt = window._hmt || [];
+    var s = document.createElement('script');
+    s.async = 1;
+    s.src = 'https://hm.baidu.com/hm.js?' + CFG.analytics.id;
+    var first = document.getElementsByTagName('script')[0];
+    if (first && first.parentNode) first.parentNode.insertBefore(s, first);
+    else document.head.appendChild(s);
+
+    window.__hzTrackPageview = function (url) {
+      if (window._hmt) window._hmt.push(['_trackPageview', url || location.pathname]);
+    };
+  }
+
+  /* 可选：从服务端接口读取百度统计开放平台的真实数据。
+     配了 readStatsApi 且返回 { visits, comments, shares } 时优先用它，
+     否则一律展示本地从 0 开始的真实累计。 */
+  function readRemoteStats(cb) {
+    var api = (CFG.analytics || {}).readStatsApi;
+    if (!api || typeof fetch !== 'function') { cb(null); return; }
+    fetch(api, { credentials: 'omit' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { cb(j && typeof j.visits === 'number' ? j : null); })
+      .catch(function () { cb(null); });
+  }
 
   /* 六个标签 —— 与全站统一引导文案「下次来黄磜____」配套 */
   var TAGS = [
@@ -51,18 +92,18 @@
   /* 种子留言：让页面第一次打开就不是空的。
      offset 单位是分钟（相对首次注入的时间），reply 为运营号置顶回复。 */
   var SEED = [
-    { name: '陈晓明', tag: 'sakura', extra: '带爸妈一起来，住茶园那家民宿', offset: 42, likes: 42, reply: '谢谢你！今年茶樱节定在 3 月，雪峒茶园等你～' },
-    { name: '李婉君', tag: 'paper', extra: '想看一次周六下午的展演', offset: 96, likes: 37, reply: '每周六 14:00 雪峒村固定展演，传承人亲自带教，记得提前预约。' },
-    { name: '王志强', tag: 'camp', extra: '', offset: 168, likes: 28, reply: '' },
-    { name: '张慧敏', tag: 'leaf', extra: '红叶季一定要挑个工作日来', offset: 240, likes: 31, reply: '懂行！红叶季工作日人少景好，11 月中下旬是峰值。' },
-    { name: '刘家豪', tag: 'melon', extra: '佛手瓜宴听说要提前订', offset: 312, likes: 24, reply: '' },
-    { name: '周雨欣', tag: 'folk', extra: '', offset: 420, likes: 19, reply: '年俗季从腊月廿三开始，舞纸马、打糍粑、客家山歌连着来。' },
-    { name: '黄国栋', tag: 'sakura', extra: '拍完樱花顺路去趟红色旧址', offset: 560, likes: 33, reply: '' },
-    { name: '吴美玲', tag: 'camp', extra: '带娃，问问有没有亲子营位', offset: 700, likes: 21, reply: '溪谷露营区有亲子营位，帐篷间距大，热水 24 小时供应。' },
-    { name: '郑凯文', tag: 'leaf', extra: '', offset: 880, likes: 17, reply: '' },
-    { name: '曾秀兰', tag: 'paper', extra: '我们村以前也有纸马队', offset: 1120, likes: 26, reply: '那太好了！镇里正在做口述史采集，欢迎回来聊聊老一辈的纸马队。' },
-    { name: '罗子谦', tag: 'melon', extra: '想买一箱带回广州', offset: 1450, likes: 15, reply: '' },
-    { name: '谢雅雯', tag: 'folk', extra: '', offset: 1900, likes: 22, reply: '年俗季民宿紧张，建议提前两周订房。' }
+    { name: '陈晓明', tag: 'sakura', extra: '带爸妈一起来，住茶园那家民宿', offset: 0, likes: 42, reply: '谢谢你！今年茶樱节定在 3 月，雪峒茶园等你～', isSeed: true },
+    { name: '李婉君', tag: 'paper', extra: '想看一次周六下午的展演', offset: 0, likes: 37, reply: '每周六 14:00 雪峒村固定展演，传承人亲自带教，记得提前预约。', isSeed: true },
+    { name: '王志强', tag: 'camp', extra: '', offset: 0, likes: 28, reply: '', isSeed: true },
+    { name: '张慧敏', tag: 'leaf', extra: '红叶季一定要挑个工作日来', offset: 0, likes: 31, reply: '懂行！红叶季工作日人少景好，11 月中下旬是峰值。', isSeed: true },
+    { name: '刘家豪', tag: 'melon', extra: '佛手瓜宴听说要提前订', offset: 0, likes: 24, reply: '', isSeed: true },
+    { name: '周雨欣', tag: 'folk', extra: '', offset: 0, likes: 19, reply: '年俗季从腊月廿三开始，舞纸马、打糍粑、客家山歌连着来。', isSeed: true },
+    { name: '黄国栋', tag: 'sakura', extra: '拍完樱花顺路去趟红色旧址', offset: 0, likes: 33, reply: '', isSeed: true },
+    { name: '吴美玲', tag: 'camp', extra: '带娃，问问有没有亲子营位', offset: 0, likes: 21, reply: '溪谷露营区有亲子营位，帐篷间距大，热水 24 小时供应。', isSeed: true },
+    { name: '郑凯文', tag: 'leaf', extra: '', offset: 0, likes: 17, reply: '', isSeed: true },
+    { name: '曾秀兰', tag: 'paper', extra: '我们村以前也有纸马队', offset: 0, likes: 26, reply: '那太好了！镇里正在做口述史采集，欢迎回来聊聊老一辈的纸马队。', isSeed: true },
+    { name: '罗子谦', tag: 'melon', extra: '想买一箱带回广州', offset: 0, likes: 15, reply: '', isSeed: true },
+    { name: '谢雅雯', tag: 'folk', extra: '', offset: 0, likes: 22, reply: '年俗季民宿紧张，建议提前两周订房。', isSeed: true }
   ];
 
   /* 官方运营号 —— 回复带上它才有温度 */
@@ -210,7 +251,9 @@
     }
   };
 
-  /* 首次访问时注入种子留言 —— 页面一打开就是热闹的 */
+  /* 首次访问时注入种子留言 —— 页面一打开就是热闹的。
+     ⚠️ 这 12 条是演示用种子数据（isSeed: true），界面上会打「示例」标记，
+        接入真实留言后端（site.config.js → comment.provider = 'twikoo'）后应清空。 */
   function seedOnce() {
     if (Store.get('seeded', false)) return;
     var now = Date.now();
@@ -224,7 +267,8 @@
         at: now - item.offset * 60000,
         likes: item.likes,
         reply: item.reply || '',
-        seed: true
+        seed: true,
+        isSeed: item.isSeed === true
       };
     });
     Store.set('wishes', list);
@@ -279,14 +323,13 @@
     };
   }
 
-  /* 今日展示口径：日期种子基线 + 本日本地真实增量 */
+  /* 今日展示口径：只用本日本地真实增量，不再叠加伪随机基线 */
   function todayTotals() {
     var t = today();
-    var seed = todaySeed();
     return {
-      visits: pseudo(seed, 1, 268, 392) + (t.visits || 0),
-      comments: pseudo(seed, 2, 38, 72) + (t.comments || 0),
-      shares: pseudo(seed, 3, 74, 128) + (t.shares || 0)
+      visits: (t.visits || 0),
+      comments: (t.comments || 0),
+      shares: (t.shares || 0)
     };
   }
 
@@ -302,6 +345,28 @@
     Store.set('wishes', list);
   }
 
+  /* 深链命中的留言 ID —— 由 ?wish=<id> 决定，影响渲染（置顶卡 + 高亮） */
+  var PINNED_ID = null;
+
+  /* 私密留言：不生成公开分享链接，转发按钮置灰 */
+  function isPrivate(w) {
+    return !!(w && (w.private === true || w.isPrivate === true));
+  }
+
+  function findWish(id) {
+    if (!id) return null;
+    var list = wishes();
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].id === id) return list[i];
+    }
+    return null;
+  }
+
+  /* 按 id 找出页面上所有对应的留言卡（滚动墙有两份副本） */
+  function cardsOf(id) {
+    return document.querySelectorAll('[data-wish-id="' + id + '"]');
+  }
+
   function addWish(data) {
     var list = wishes();
     var w = {
@@ -313,7 +378,9 @@
       at: Date.now(),
       likes: 0,
       reply: '',
-      mine: true
+      mine: true,
+      private: data.isPrivate === true,
+      shares: 0
     };
     list.unshift(w);
     saveWishes(list);
@@ -338,7 +405,7 @@
 
   var REPLY_BANK = {
     sakura: '记下了！茶樱节定在 3 月，雪峒茶园那片先开，到时候公众号第一时间喊你。',
-    camp: '溪谷西瓜露营节 7—8 月，亲子营位有限，出发前一周打 0751-2423088 留位更稳。',
+    camp: '溪谷西瓜露营节 7—8 月，亲子营位有限，出发前一周打 2423085 留位更稳。',
     leaf: '红叶世界 11 月中下旬最红，工作日来人少景好，等你～',
     folk: '年俗季从腊月廿三热闹到正月十五，舞纸马、打糍粑、客家山歌连着来。',
     paper: '每周六 14:00 雪峒村有展演和教学，传承人亲自带，提前一周约就行。',
@@ -380,6 +447,11 @@
      渲染 · 实时数据条
      ====================================================================== */
 
+  /* 访问量数字下方的口径小字 */
+  function statsNote() {
+    return STATS_SINCE + (analyticsReady() ? ' · 百度统计已接入' : ' · 百度统计待接入');
+  }
+
   function renderTicker(host) {
     var t = todayTotals();
     var total = totals();
@@ -392,14 +464,16 @@
       '<span class="grow-ticker__sep" aria-hidden="true"></span>' +
       '<span class="grow-ticker__item"><span class="grow-ticker__num" data-grow-num="s">' + fmt(t.shares) + '</span>今日分享</span>' +
       '<span class="grow-ticker__sep" aria-hidden="true"></span>' +
-      '<span class="grow-ticker__item">已有 <span class="grow-ticker__num" data-grow-num="tv">' + fmt(total.visits) + '</span> 人看过</span>';
+      '<span class="grow-ticker__item">已有 <span class="grow-ticker__num" data-grow-num="tv">' + fmt(total.visits) + '</span> 人看过</span>' +
+      '<span class="grow-ticker__note">' + statsNote() + '</span>';
 
     countUp(host.querySelectorAll('[data-grow-num]'));
   }
 
   /* 数字自增动画；reduced-motion 时直接落位 */
   function countUp(nodes) {
-    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var M = window.HZMotion;
+    var reduced = M ? M.reduced() : window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     Array.prototype.forEach.call(nodes, function (el) {
       var target = parseInt(el.textContent.replace(/[^\d]/g, ''), 10) || 0;
       if (reduced || target < 2) return;
@@ -445,7 +519,9 @@
         '</div></div></article>';
     }
 
-    return '<article class="grow-wish' + (w.mine ? ' grow-wish--mine' : '') + '">' +
+    return '<article class="grow-wish' + (w.mine ? ' grow-wish--mine' : '') +
+      (isPrivate(w) ? ' grow-wish--private' : '') + '"' +
+      ' data-wish-id="' + esc(w.id) + '">' +
       '<span class="grow-wish__emoji" aria-hidden="true">' + tag.emoji + '</span>' +
       '<div class="grow-wish__body">' +
       '<p class="grow-wish__text">' + esc(w.text) + '</p>' +
@@ -453,6 +529,8 @@
       (w.reply ? '<p class="grow-wish__extra"><span class="grow-wish__reply-mark">官方回复</span> ' + esc(w.reply) + '</p>' : '') +
       '<div class="grow-wish__meta">' +
       '<span class="grow-wish__name">' + esc(maskName(w.name)) + '</span>' +
+      (w.isSeed || w.seed ? '<span class="grow-wish__seed-mark">示例</span>' : '') +
+      (isPrivate(w) ? '<span class="grow-wish__seed-mark">私密</span>' : '') +
       '<span>' + timeAgo(w.at) + '</span>' +
       '<button class="grow-wish__like" type="button" data-grow-like="' + esc(w.id) + '"' +
       ' aria-pressed="' + (likedOn ? 'true' : 'false') + '"' +
@@ -460,7 +538,31 @@
       '<span aria-hidden="true">' + (likedOn ? '❤️' : '🤍') + '</span>' +
       '<span data-grow-likes>' + (w.likes || 0) + '</span>' +
       '</button>' +
+      shareButton(w) +
+      (w.mine ? deleteButton(w) : '') +
       '</div></div></article>';
+  }
+
+  /* 转发按钮 —— 私密留言直接置灰，不生成公开链接 */
+  function shareButton(w) {
+    var priv = isPrivate(w);
+    var label = priv ? '私密留言不生成分享链接，无法转发' : '转发这条留言的独立链接';
+    return '<button class="grow-wish__share' + (priv ? ' is-locked' : '') + '" type="button"' +
+      ' data-grow-share="' + esc(w.id) + '"' +
+      (priv ? ' disabled aria-disabled="true"' : '') +
+      ' title="' + esc(label) + '" aria-label="' + esc(label) + '">' +
+      '<span aria-hidden="true">' + (priv ? '🔒' : '↗') + '</span>' +
+      '<span>转发</span>' +
+      ((w.shares || 0) > 0
+        ? '<span class="grow-wish__share-n" data-grow-share-count="' + esc(w.id) + '">' + fmt(w.shares) + '</span>'
+        : '') +
+      '</button>';
+  }
+
+  /* 删除按钮 —— 只对自己刚留下的留言开放，删除走收尾动画 */
+  function deleteButton(w) {
+    return '<button class="grow-wish__del" type="button" data-grow-del="' + esc(w.id) + '"' +
+      ' aria-label="删除这条留言" title="删除这条留言">删除</button>';
   }
 
   /* 展开成「留言 + 官方回复」的成对序列 */
@@ -473,27 +575,75 @@
     return out;
   }
 
+  /* 深链打开时的置顶卡：把这条留言从跑马灯里「拎」出来静态展示，
+     不会因为墙在滚动而找不到目标。 */
+  function pinBlock() {
+    if (!PINNED_ID) return '';
+    var w = findWish(PINNED_ID);
+    if (!w) return '';
+    var S = window.HZShare;
+    var url = S ? S.wishUrl(w.id) : '';
+    return '<div class="grow-wall__pin" role="status">' +
+      '<p class="grow-wall__pin-label">' +
+      '<span aria-hidden="true">📌</span> 你正在查看的这条留言' +
+      '<button class="grow-wall__pin-close" type="button" data-grow-pin-close aria-label="取消定位">✕</button>' +
+      '</p>' +
+      '<div class="grow-wall__pin-card">' + wishCard(w, false) + '</div>' +
+      '<p class="grow-wall__pin-tip">这条留言有独立链接，可直接复制分享：' +
+      '<span class="grow-wall__pin-url">' + esc(url) + '</span></p>' +
+      '</div>';
+  }
+
+  function clearPin() {
+    PINNED_ID = null;
+    if (window.HZShare) window.HZShare.cleanWishParam();
+    document.querySelectorAll('[data-growth="wall"]').forEach(renderWall);
+  }
+
   function renderWall(host) {
+    var M = window.HZMotion;
+
+    /* 重渲染前先给上一轮还在播的动画收尾，避免残留动画挂到新 DOM 上 */
+    if (M) M.destroyWithin(host);
+
     var list = wishes().slice(0, 14);
+
+    /* 深链命中的留言如果不在前 14 条里，提到最前面，保证打开链接一定看得到 */
+    if (PINNED_ID) {
+      var inList = false;
+      for (var p = 0; p < list.length; p++) {
+        if (list[p].id === PINNED_ID) { inList = true; break; }
+      }
+      if (!inList) {
+        var pinned = findWish(PINNED_ID);
+        if (pinned) list.unshift(pinned);
+      }
+    }
+
     var items = flatten(list);
-    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var reduced = M ? M.reduced() : window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var lowTier = M ? M.tier() === 'low' : false;
+    /* 低档位 / 减弱动效：不跑常驻跑马灯，改为可滚动列表，省掉一条 transform 动画 */
+    var animated = !reduced && !lowTier;
+
     var html = items.map(function (it) {
       return wishCard(it.data, it.kind === 'reply');
     }).join('');
 
     var total = totals().comments;
     host.innerHTML =
-      '<div class="grow-wall">' +
+      '<div class="grow-wall' + (PINNED_ID ? ' is-pinned' : '') + '">' +
       '<div class="grow-wall__head">' +
       '<h3 class="grow-wall__title">大家都在说 · 下次来黄磜</h3>' +
       '<p class="grow-wall__count">已有 <strong data-growth="count">' + fmt(total) + '</strong> 人许愿</p>' +
       '</div>' +
+      pinBlock() +
       '<div class="grow-wall__viewport">' +
-      '<div class="grow-wall__track' + (reduced ? '' : ' is-animated') + '"' +
+      '<div class="grow-wall__track' + (animated ? ' is-animated' : '') + '"' +
       ' style="--grow-wall-duration:' + Math.max(28, items.length * 4.2).toFixed(0) + 's"' +
       ' aria-label="许愿池留言列表" role="list">' +
       '<div class="grow-wall__group" role="listitem">' + html + '</div>' +
-      (reduced ? '' : '<div class="grow-wall__group" aria-hidden="true">' + html + '</div>') +
+      (animated ? '<div class="grow-wall__group" aria-hidden="true">' + html + '</div>' : '') +
       '</div></div></div>';
 
     host.querySelectorAll('[data-grow-like]').forEach(function (btn) {
@@ -555,7 +705,12 @@
       '<button class="btn btn--primary" type="button" data-grow-submit disabled>许下这个愿</button>' +
       '</div>' +
 
-      '<p class="grow-compose__hint">留言会展示在许愿池，昵称自动打码（陈晓明 → 陈**）。话题 #下次来黄磜</p>' +
+      '<label class="grow-compose__check">' +
+      '<input type="checkbox" id="grow-private">' +
+      '<span>设为私密留言（不生成分享链接，转发按钮会置灰）</span>' +
+      '</label>' +
+
+      '<p class="grow-compose__hint">留言会展示在许愿池，昵称自动打码（陈晓明 → 陈**）。每条留言都有独立链接，点卡片上的「转发」即可分享。话题 #下次来黄磜</p>' +
       '<div data-grow-done></div>' +
       '</div>';
 
@@ -606,13 +761,15 @@
       if (!picked) return;
       var nickVal = host.querySelector('#grow-nick').value.trim();
       var extraVal = host.querySelector('#grow-extra').value.trim();
+      var privateVal = host.querySelector('#grow-private');
       var t = tagOf(picked);
 
       var w = addWish({
         tag: picked,
         text: t.phrase,
         extra: extraVal,
-        name: nickVal || '黄磜旅人'
+        name: nickVal || '黄磜旅人',
+        isPrivate: !!(privateVal && privateVal.checked)
       });
 
       /* 配了 Twikoo 就同时发到线上，失败也不影响本地展示 */
@@ -627,13 +784,16 @@
         '<p class="grow-done__text" data-grow-reply-slot><span style="opacity:.7">正在通知镇里的工作人员…</span></p>' +
         '<div class="grow-done__actions">' +
         '<button class="btn btn--secondary btn--sm" type="button" data-grow-copy="' + esc(t.phrase) + '｜#下次来黄磜">复制这句话</button>' +
-        '<button class="btn btn--secondary btn--sm" type="button" data-grow-share>分享给朋友</button>' +
+        '<button class="btn btn--secondary btn--sm" type="button" data-grow-share="' + esc(w.id) + '"' +
+        (isPrivate(w) ? ' disabled aria-disabled="true" title="私密留言不生成分享链接"' : '') + '>' +
+        (isPrivate(w) ? '🔒 私密留言' : '转发这条留言') + '</button>' +
         '</div></div>';
 
       host.querySelector('#grow-extra').value = '';
 
       /* 所有墙与计数同步刷新 */
       document.querySelectorAll('[data-growth="wall"]').forEach(renderWall);
+      flashNewWish(w.id);
       bumpNumbers();
       notify('许愿成功，已挂上许愿池', '🎉');
 
@@ -649,25 +809,220 @@
       }, 1200);
     });
 
-    /* 复制 / 分享（分享的完整实现在第二期，这里先把计数埋进去） */
+    /* 复制「这句话」—— 与转发是两回事：这是把文案复制走，
+       转发（data-grow-share）走的是 share.js 的独立链接，由全局委托统一处理。 */
     host.addEventListener('click', function (e) {
-      var copyBtn = e.target.closest('[data-grow-copy]');
-      if (copyBtn && navigator.clipboard) {
-        navigator.clipboard.writeText(copyBtn.getAttribute('data-grow-copy')).then(function () {
+      var copyBtn = e.target.closest ? e.target.closest('[data-grow-copy]') : null;
+      if (!copyBtn) return;
+      var S = window.HZShare;
+      var text = copyBtn.getAttribute('data-grow-copy');
+      if (S) {
+        S.copyText(text).then(function (ok) {
+          notify(ok ? '已复制，去朋友圈粘贴吧' : '复制失败，请手动选择文字', ok ? '📋' : '⚠');
+        });
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(function () {
           notify('已复制，去朋友圈粘贴吧', '📋');
         }).catch(function () { notify('复制失败，请手动选择文字', '⚠'); });
-        return;
-      }
-      var shareBtn = e.target.closest('[data-grow-share]');
-      if (shareBtn) {
-        bump('shares', 1);
-        bumpToday('shares', 1);
-        document.querySelectorAll('[data-growth="ticker"]').forEach(renderTicker);
-        notify('感谢转发！已记入分享榜', '🚀');
       }
     });
 
     sync();
+  }
+
+  /* ======================================================================
+     留言新增 / 删除动画
+     ====================================================================== */
+
+  /* 新留言入场：播一次就摘，重复渲染不会反复叠加动画 */
+  function flashNewWish(id) {
+    var M = window.HZMotion;
+    Array.prototype.forEach.call(cardsOf(id), function (c) {
+      if (M) M.once(c, 'is-entering', 480);
+      else c.classList.add('is-entering');
+    });
+  }
+
+  /* 删除：先播收尾动画，播完才真正从存储里移除 */
+  function deleteWish(id) {
+    var M = window.HZMotion;
+    var first = cardsOf(id)[0];
+    if (first && M) {
+      M.exit(first, function () { commitDelete(id); }, 'is-leaving');
+    } else {
+      commitDelete(id);
+    }
+  }
+
+  function commitDelete(id) {
+    saveWishes(wishes().filter(function (w) { return w.id !== id; }));
+    if (PINNED_ID === id) PINNED_ID = null;
+    if (window.HZShare) window.HZShare.cleanWishParam();
+    document.querySelectorAll('[data-growth="wall"]').forEach(renderWall);
+    bumpNumbers();
+    notify('留言已删除', '🗑');
+  }
+
+  /* ======================================================================
+     转发 —— 主体是链接，不是一段拼接文字
+     ====================================================================== */
+
+  /* 统计这条留言的转发量与来源标记（&from=xxx） */
+  function countWishShare(w, source) {
+    bump('shares', 1);
+    bumpToday('shares', 1);
+
+    var list = wishes();
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].id === w.id) {
+        list[i].shares = (list[i].shares || 0) + 1;
+        if (source) {
+          list[i].shareFrom = list[i].shareFrom || {};
+          list[i].shareFrom[source] = (list[i].shareFrom[source] || 0) + 1;
+        }
+        break;
+      }
+    }
+    saveWishes(list);
+
+    document.querySelectorAll('[data-growth="ticker"]').forEach(renderTicker);
+    document.querySelectorAll('[data-grow-share-count="' + w.id + '"]').forEach(function (el) {
+      el.textContent = fmt(list[i] ? (list[i].shares || 0) : 0);
+    });
+  }
+
+  /* 转发按钮的加载 / 完成状态（滚动墙有副本，两份一起变） */
+  function setShareBusy(id, on) {
+    var M = window.HZMotion;
+    if (!M) return;
+    Array.prototype.forEach.call(
+      document.querySelectorAll('[data-grow-share="' + id + '"]'),
+      function (b) { M.busy(b, on); }
+    );
+  }
+
+  function onShareClick(btn) {
+    var S = window.HZShare;
+    if (!S) { notify('转发模块未加载', '⚠'); return; }
+    if (btn.disabled || btn.getAttribute('aria-disabled') === 'true') return;
+
+    var id = btn.getAttribute('data-grow-share');
+    var w = findWish(id);
+
+    if (!w) { notify('这条留言已不存在', '⚠'); return; }
+    if (isPrivate(w)) { notify('私密留言不生成公开分享链接', '🔒'); return; }
+
+    setShareBusy(id, true);
+
+    /* 必须在用户手势内同步发起，否则原生分享面板会被浏览器拦截 */
+    S.shareWish(w, { source: 'wish' }).then(function (res) {
+      setShareBusy(id, false);
+      if (res.cancelled) return;                 // 用户主动取消：不提示、不计数
+      if (res.channel === 'failed') {
+        notify('分享失败，可长按复制地址栏链接', '⚠');
+        return;
+      }
+      countWishShare(w, res.source);
+      if (res.channel === 'native') notify('已打开分享面板，转发给朋友吧', '🚀');
+      else notify('留言链接已复制，可粘贴分享', '🔗');
+    });
+  }
+
+  /* 全局委托：滚动墙会反复重渲染，逐卡绑定会漏也会重复 */
+  function bindWishActions() {
+    document.addEventListener('click', function (e) {
+      var el = e.target && e.target.closest ? e.target.closest('[data-grow-share], [data-grow-del], [data-grow-pin-close]') : null;
+      if (!el) return;
+
+      if (el.hasAttribute('data-grow-share')) { onShareClick(el); return; }
+      if (el.hasAttribute('data-grow-del')) {
+        deleteWish(el.getAttribute('data-grow-del'));
+        return;
+      }
+      if (el.hasAttribute('data-grow-pin-close')) { clearPin(); return; }
+    });
+  }
+
+  /* ======================================================================
+     深链：?wish=<id> —— 打开链接定位并高亮该留言
+     ====================================================================== */
+
+  function scrollToBoard() {
+    var board = document.querySelector('.grow-wall');
+    if (!board) return;
+    var M = window.HZMotion;
+    if (M) { M.scrollToEl(board, { block: 'center' }); return; }
+    if (typeof board.scrollIntoView !== 'function') return;
+    try { board.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+    catch (err) { /* 环境不支持：忽略 */ }
+  }
+
+  function focusWish(id) {
+    var M = window.HZMotion;
+
+    /* 先高亮再滚动：滚动失败也不影响定位标记 */
+    Array.prototype.forEach.call(cardsOf(id), function (card) {
+      if (M) M.once(card, 'is-focused', 900);
+      else card.classList.add('is-focused');
+    });
+
+    var first = cardsOf(id)[0];
+    if (first) {
+      first.setAttribute('tabindex', '-1');
+      try { first.focus({ preventScroll: true }); } catch (e) { first.focus(); }
+    }
+
+    scrollToBoard();
+  }
+
+  /* 留言不存在时的兜底：抹掉参数 → 回到留言板 → 提示「不存在或已删除」 */
+  function handleMissingWish() {
+    var S = window.HZShare;
+    if (S) S.cleanWishParam();
+
+    var home = (CFG.share && CFG.share.boardHome) || '';
+    var here = location.pathname.split('/').pop() || 'index.html';
+    var target = String(home).split('#')[0].split('?')[0];
+    var homePage = target ? target.split('/').pop() : '';
+
+    /* 配了主页且当前不在主页 → 跳过去，并把提示带过去 */
+    if (home && homePage && homePage !== here) {
+      var sep = home.indexOf('?') >= 0 ? '&' : '?';
+      try {
+        location.replace(home + sep + 'wish=missing');
+        return;
+      } catch (e) { /* 跳转失败就地处理 */ }
+    }
+
+    notify('该留言不存在或已删除，已回到留言板', '⚠');
+    scrollToBoard();
+  }
+
+  function handleWishDeepLink() {
+    var S = window.HZShare;
+    if (!S) return;
+
+    var parsed = S.parseWishParam();
+    if (!parsed) return;
+
+    var w = findWish(parsed.id);
+
+    if (!w) { handleMissingWish(); return; }
+
+    if (isPrivate(w)) {
+      S.cleanWishParam();
+      notify('这条是私密留言，不支持公开访问', '🔒');
+      scrollToBoard();
+      return;
+    }
+
+    PINNED_ID = w.id;
+    S.applyWishOg(w, S.wishUrl(w.id, parsed.from));
+    document.querySelectorAll('[data-growth="wall"]').forEach(renderWall);
+
+    var M = window.HZMotion;
+    if (M) M.nextFrame(function () { focusWish(w.id); });
+    else setTimeout(function () { focusWish(w.id); }, 80);
   }
 
   /* ======================================================================
@@ -708,6 +1063,7 @@
 
   function boot() {
     seedOnce();
+    injectAnalytics();
 
     /* 一次访问 = 一次 PV */
     bump('visits', 1);
@@ -715,11 +1071,18 @@
 
     renderAll();
 
+    /* 转发 / 删除 / 取消定位：全局委托一次，墙重渲染后不用重新绑定 */
+    bindWishActions();
+
+    /* 深链 ?wish=<id>：定位 + 高亮 + 重写分享卡片 */
+    handleWishDeepLink();
+
     /* 配了 Twikoo 就尝试拉取线上留言；拉不到就静默用本地的 */
     Remote.load(function (remoteList) {
       if (!remoteList || !remoteList.length) return;
       saveWishes(mergeWishes(remoteList));
       document.querySelectorAll('[data-growth="wall"]').forEach(renderWall);
+      if (PINNED_ID) focusWish(PINNED_ID);
     });
   }
 
@@ -744,6 +1107,13 @@
     fmt: fmt,
     esc: esc,
     notify: notify,
-    renderWall: renderWall
+    renderWall: renderWall,
+    findWish: findWish,
+    isPrivate: isPrivate,
+    deleteWish: deleteWish,
+    flashNewWish: flashNewWish,
+    clearPin: clearPin,
+    focusWish: focusWish,
+    pinnedId: function () { return PINNED_ID; }
   };
 })();

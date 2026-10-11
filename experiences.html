@@ -44,6 +44,8 @@
     <link rel="stylesheet" href="assets/css/components-extra.css">
     <link rel="stylesheet" href="assets/css/growth.css">
     <link rel="stylesheet" href="assets/css/identity.css">
+    <!-- 动效规范层：放最后，统一收敛全站时长 / 缓动 / 档位降级 -->
+    <link rel="stylesheet" href="assets/css/motion.css">
 
     <script>
         (function () {
@@ -86,13 +88,13 @@
                         <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
                     </svg>
                 </button>
-                <a class="gov-hotline" href="tel:07512423088" aria-label="拨打黄磜镇旅游热线 0751-2423088">
+                <span class="gov-hotline" aria-label="拨打黄磜镇旅游热线 2423085">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.1a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z" />
                     </svg>
-                    <span class="gov-hotline__num">0751-2423088</span>
-                </a>
+                    <span class="gov-hotline__num">2423085</span>
+                </span>
                 <button class="navbar__toggle" type="button" data-drawer-open="mainDrawer" aria-label="打开导航菜单"
                     aria-expanded="false" aria-controls="mainDrawer">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -141,7 +143,7 @@
                     <h1 class="page-header__title">旅客玩什么</h1>
                     <p class="page-header__desc">
                         不只是看风景。换上汉服走进茶田、亲手炒一锅茶、跟着非遗传承人学一段纸马舞、在竹林里吃一顿茶宴 ——
-                        12 项可以真正上手参与的体验，价格与包含项目都写清楚了。
+                        12 项可以真正上手参与的体验，包含项目与预约方式都写清楚了。
                     </p>
                     <p class="page-head__origin">
                         <span>广东省韶关市新丰县黄磜镇</span>
@@ -154,8 +156,8 @@
                             <div class="page-header__stat-label">可预约体验</div>
                         </div>
                         <div>
-                            <div class="page-header__stat-value">¥120<span style="font-size:.6em">起</span></div>
-                            <div class="page-header__stat-label">人均价格</div>
+                            <div class="page-header__stat-value">预约制</div>
+                            <div class="page-header__stat-label">收费方式</div>
                         </div>
                         <div>
                             <div class="page-header__stat-value">1–4<span style="font-size:.6em">小时</span></div>
@@ -165,6 +167,21 @@
                 </div>
             </div>
         </header>
+
+        <!-- ==================== 调研声明 ==================== -->
+        <section class="section section--tight" style="padding-bottom:0">
+            <div class="container">
+                <div class="callout" role="note">
+                    <span class="callout__icon" aria-hidden="true">ℹ</span>
+                    <div>
+                        <p class="callout__title">调研建议方案说明</p>
+                        <p class="callout__text">
+                            以下体验项目为调研团队基于本地资源设计的建议方案，实际开放情况与定价以经营者为准，预约请扫描底部二维码
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- ==================== 筛选栏 ==================== -->
         <div class="filterbar" id="filterbar">
@@ -226,10 +243,7 @@
                             <img src="assets/img/p37664482.jpg"
                                 alt="游客身着汉服在茶田间拍摄" loading="lazy">
                             <span class="badge badge--on-image">最受欢迎</span>
-                            <span class="exp-card__price-tag">
-                                <span class="price__currency">¥</span><span class="price__value tabular">199</span>
-                                <span class="price__unit">/人</span>
-                            </span>
+                            <span class="exp-card__price-tag">预约制</span>
                         </button>
                         <div class="card__body">
                             <h3 class="card__title">茶园汉服旅拍</h3>
@@ -239,6 +253,7 @@
                                     <span class="rating__count">（326）</span></span>
                                 <span>2–3 小时</span>
                             </div>
+                            <p class="exp-card__suggest">建议价 ¥199（由经营者实际定价）</p>
                         </div>
                     </article>
 
@@ -255,10 +270,7 @@
                         <button class="card__media card__media--wide" type="button" aria-label="查看采茶制茶详情">
                             <img src="assets/img/p4544202.jpg"
                                 alt="茶农在茶园采茶" loading="lazy">
-                            <span class="exp-card__price-tag">
-                                <span class="price__currency">¥</span><span class="price__value tabular">120</span>
-                                <span class="price__unit">/人</span>
-                            </span>
+                            <span class="exp-card__price-tag">预约制</span>
                         </button>
                         <div class="card__body">
                             <h3 class="card__title">采茶制茶全流程</h3>
@@ -268,6 +280,7 @@
                                     <span class="rating__count">（512）</span></span>
                                 <span>3 小时</span>
                             </div>
+                            <p class="exp-card__suggest">建议价 ¥120（由经营者实际定价）</p>
                         </div>
                     </article>
 
@@ -284,10 +297,7 @@
                         <button class="card__media" type="button" aria-label="查看竹林茶宴详情">
                             <img src="assets/img/uphoto-1414235077428-338989a2e8c0-w700.jpg"
                                 alt="竹林中的长桌茶宴" loading="lazy">
-                            <span class="exp-card__price-tag">
-                                <span class="price__currency">¥</span><span class="price__value tabular">168</span>
-                                <span class="price__unit">/人</span>
-                            </span>
+                            <span class="exp-card__price-tag">预约制</span>
                         </button>
                         <div class="card__body">
                             <h3 class="card__title">竹林茶宴</h3>
@@ -297,6 +307,7 @@
                                     <span class="rating__count">（184）</span></span>
                                 <span>2 小时</span>
                             </div>
+                            <p class="exp-card__suggest">建议价 ¥168（由经营者实际定价）</p>
                         </div>
                     </article>
 
@@ -314,10 +325,7 @@
                             <img src="assets/img/uphoto-1508264165352-258db2ebd59b-w700.jpg"
                                 alt="秋季红叶林中的人像拍摄" loading="lazy">
                             <span class="badge badge--on-image">季节限定</span>
-                            <span class="exp-card__price-tag">
-                                <span class="price__currency">¥</span><span class="price__value tabular">260</span>
-                                <span class="price__unit">/组</span>
-                            </span>
+                            <span class="exp-card__price-tag">预约制</span>
                         </button>
                         <div class="card__body">
                             <h3 class="card__title">秋日红叶人像跟拍</h3>
@@ -327,6 +335,7 @@
                                     <span class="rating__count">（97）</span></span>
                                 <span>3 小时</span>
                             </div>
+                            <p class="exp-card__suggest">建议价 ¥260（由经营者实际定价）</p>
                         </div>
                     </article>
 
@@ -343,10 +352,7 @@
                         <button class="card__media card__media--wide" type="button" aria-label="查看客家擂茶手作详情">
                             <img src="assets/img/uphoto-1558160074-4d7d8bdf4256-w700.jpg"
                                 alt="客家擂茶制作过程" loading="lazy">
-                            <span class="exp-card__price-tag">
-                                <span class="price__currency">¥</span><span class="price__value tabular">88</span>
-                                <span class="price__unit">/人</span>
-                            </span>
+                            <span class="exp-card__price-tag">预约制</span>
                         </button>
                         <div class="card__body">
                             <h3 class="card__title">客家擂茶手作</h3>
@@ -356,6 +362,7 @@
                                     <span class="rating__count">（238）</span></span>
                                 <span>1.5 小时</span>
                             </div>
+                            <p class="exp-card__suggest">建议价 ¥88（由经营者实际定价）</p>
                         </div>
                     </article>
 
@@ -373,10 +380,7 @@
                             <img src="assets/img/p32700828.jpg"
                                 alt="春茶开茶节民俗活动现场" loading="lazy">
                             <span class="badge badge--on-image">年度活动</span>
-                            <span class="exp-card__price-tag">
-                                <span class="price__currency">¥</span><span class="price__value tabular">60</span>
-                                <span class="price__unit">/人</span>
-                            </span>
+                            <span class="exp-card__price-tag">预约制</span>
                         </button>
                         <div class="card__body">
                             <h3 class="card__title">春茶开茶节</h3>
@@ -386,6 +390,7 @@
                                     <span class="rating__count">（641）</span></span>
                                 <span>半天</span>
                             </div>
+                            <p class="exp-card__suggest">建议价 ¥60（由经营者实际定价）</p>
                         </div>
                     </article>
 
@@ -402,10 +407,7 @@
                         <button class="card__media card__media--tall" type="button" aria-label="查看茶皂与茶枕手作详情">
                             <img src="assets/img/uphoto-1600857544200-b2f666a9a2ec-w700.jpg"
                                 alt="茶皂手作成品" loading="lazy">
-                            <span class="exp-card__price-tag">
-                                <span class="price__currency">¥</span><span class="price__value tabular">98</span>
-                                <span class="price__unit">/人</span>
-                            </span>
+                            <span class="exp-card__price-tag">预约制</span>
                         </button>
                         <div class="card__body">
                             <h3 class="card__title">茶皂与茶枕手作</h3>
@@ -415,6 +417,7 @@
                                     <span class="rating__count">（126）</span></span>
                                 <span>2 小时</span>
                             </div>
+                            <p class="exp-card__suggest">建议价 ¥98（由经营者实际定价）</p>
                         </div>
                     </article>
 
@@ -431,10 +434,7 @@
                         <button class="card__media card__media--wide" type="button" aria-label="查看红色茶旅研学详情">
                             <img src="assets/img/p33933748.jpg"
                                 alt="红色研学团队在旧址前参观" loading="lazy">
-                            <span class="exp-card__price-tag">
-                                <span class="price__currency">¥</span><span class="price__value tabular">150</span>
-                                <span class="price__unit">/人</span>
-                            </span>
+                            <span class="exp-card__price-tag">预约制</span>
                         </button>
                         <div class="card__body">
                             <h3 class="card__title">红色茶旅研学</h3>
@@ -444,6 +444,7 @@
                                     <span class="rating__count">（88）</span></span>
                                 <span>4 小时</span>
                             </div>
+                            <p class="exp-card__suggest">建议价 ¥150（由经营者实际定价）</p>
                         </div>
                     </article>
 
@@ -460,10 +461,7 @@
                         <button class="card__media" type="button" aria-label="查看樱花季汉服旅拍详情">
                             <img src="assets/img/p32073913.jpg"
                                 alt="樱花树下的汉服写真" loading="lazy">
-                            <span class="exp-card__price-tag">
-                                <span class="price__currency">¥</span><span class="price__value tabular">299</span>
-                                <span class="price__unit">/组</span>
-                            </span>
+                            <span class="exp-card__price-tag">预约制</span>
                         </button>
                         <div class="card__body">
                             <h3 class="card__title">樱花季汉服旅拍</h3>
@@ -473,6 +471,7 @@
                                     <span class="rating__count">（74）</span></span>
                                 <span>3 小时</span>
                             </div>
+                            <p class="exp-card__suggest">建议价 ¥299（由经营者实际定价）</p>
                         </div>
                     </article>
 
@@ -489,10 +488,7 @@
                         <button class="card__media card__media--tall" type="button" aria-label="查看茶点烘焙工坊详情">
                             <img src="assets/img/uphoto-1509440159596-0249088772ff-w700.jpg"
                                 alt="茶点烘焙工坊制作的茶味点心" loading="lazy">
-                            <span class="exp-card__price-tag">
-                                <span class="price__currency">¥</span><span class="price__value tabular">108</span>
-                                <span class="price__unit">/人</span>
-                            </span>
+                            <span class="exp-card__price-tag">预约制</span>
                         </button>
                         <div class="card__body">
                             <h3 class="card__title">茶点烘焙工坊</h3>
@@ -502,6 +498,7 @@
                                     <span class="rating__count">（152）</span></span>
                                 <span>2 小时</span>
                             </div>
+                            <p class="exp-card__suggest">建议价 ¥108（由经营者实际定价）</p>
                         </div>
                     </article>
 
@@ -518,10 +515,7 @@
                         <button class="card__media card__media--wide" type="button" aria-label="查看客家山歌夜话详情">
                             <img src="assets/img/uphoto-1475483768296-6163e08872a1-w700.jpg"
                                 alt="夜晚篝火旁唱客家山歌" loading="lazy">
-                            <span class="exp-card__price-tag">
-                                <span class="price__currency">¥</span><span class="price__value tabular">80</span>
-                                <span class="price__unit">/人</span>
-                            </span>
+                            <span class="exp-card__price-tag">预约制</span>
                         </button>
                         <div class="card__body">
                             <h3 class="card__title">客家山歌夜话</h3>
@@ -531,6 +525,7 @@
                                     <span class="rating__count">（113）</span></span>
                                 <span>1.5 小时</span>
                             </div>
+                            <p class="exp-card__suggest">建议价 ¥80（由经营者实际定价）</p>
                         </div>
                     </article>
 
@@ -548,10 +543,7 @@
                             <img src="assets/img/p35268681.jpg"
                                 alt="客家围屋红灯笼下的民俗展演场景" loading="lazy">
                             <span class="badge badge--on-image">省级非遗</span>
-                            <span class="exp-card__price-tag">
-                                <span class="price__currency">¥</span><span class="price__value tabular">30</span>
-                                <span class="price__unit">/人</span>
-                            </span>
+                            <span class="exp-card__price-tag">预约制</span>
                         </button>
                         <div class="card__body">
                             <h3 class="card__title">纸马舞非遗体验</h3>
@@ -561,6 +553,7 @@
                                     <span class="rating__count">（66）</span></span>
                                 <span>1.5 小时</span>
                             </div>
+                            <p class="exp-card__suggest">建议价 ¥30（由经营者实际定价）</p>
                         </div>
                     </article>
 
@@ -580,7 +573,7 @@
                         </p>
                         <div class="empty-state__actions">
                             <button class="btn btn--primary" type="button" data-filter-clear>放宽筛选条件</button>
-                            <a class="btn btn--secondary" href="tel:07512423088">电话咨询 0751-2423088</a>
+                            <span class="btn btn--secondary">电话咨询 2423085</span>
                         </div>
                     </div>
 
@@ -655,7 +648,25 @@
                         </p>
                     </div>
                     <div class="promo-banner__actions">
-                        <a class="btn btn--on-image-solid" href="tel:07512423088">拨打 0751-2423088</a>
+                        <span class="btn btn--on-image-solid">拨打 2423085</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== 预约二维码 ==================== -->
+        <section class="section section--tight" style="padding-top:0">
+            <div class="container">
+                <div class="qr-placeholder" role="note" aria-label="预约二维码待接入">
+                    <div class="qr-placeholder__box" aria-hidden="true">
+                        <span class="qr-placeholder__hint">二维码</span>
+                    </div>
+                    <div class="qr-placeholder__text">
+                        <p class="qr-placeholder__title">扫码预约 · 二维码待接入</p>
+                        <p class="qr-placeholder__desc">
+                            正式运营后此处放置预约二维码；在此之前请拨镇旅游服务热线 2423085，
+                            或到村后联系村委会协助对接经营者。
+                        </p>
                     </div>
                 </div>
             </div>
@@ -714,7 +725,7 @@
             <div>
                 <h3 class="footer__col-title">联系黄磜</h3>
                 <div class="footer__links">
-                    <a href="tel:07512423088">旅游热线 0751-2423088</a>
+                    <span>旅游热线 2423085</span>
                     <a href="mailto:info@huangzai.com">info@huangzai.com</a>
                     <span>服务时间 8:30–17:30</span>
                     <span>韶关市新丰县黄磜镇</span>
@@ -749,7 +760,7 @@
                 </div>
                 <div>
                     <span class="spec-bar__k">咨询与反馈</span>
-                    <span class="spec-bar__v"><a href="tel:07512423088">0751-2423088</a><br>服务时间 8:30–17:30</span>
+                    <span class="spec-bar__v"><span>2423085</span><br>服务时间 8:30–17:30</span>
                 </div>
                 <div>
                     <span class="spec-bar__k">站点性质</span>
@@ -775,6 +786,9 @@
     <ul class="toast-stack" data-toast-stack aria-live="polite" aria-atomic="false"></ul>
 
     <script src="site.config.js"></script>
+    <!-- 动效运行时要在 app.js 之前就绪 -->
+    <script src="assets/js/motion.js" defer></script>
+    <script src="assets/js/share.js" defer></script>
     <script src="assets/js/app.js" defer></script>
     <script src="assets/js/growth.js" defer></script>
 </body>

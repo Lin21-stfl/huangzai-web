@@ -42,6 +42,22 @@
   }
 
   /* ------------------------------------------------------------------
+     Scroll subscription — 统一走 motion.js 的合帧器，避免每个模块各写一份
+     ------------------------------------------------------------------ */
+  function onScroll(fn) {
+    if (window.HZMotion && window.HZMotion.coalesce) {
+      window.addEventListener('scroll', window.HZMotion.coalesce(fn), { passive: true });
+      return;
+    }
+    let ticking = false;
+    window.addEventListener('scroll', function () {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(function () { ticking = false; fn(); });
+    }, { passive: true });
+  }
+
+  /* ------------------------------------------------------------------
      Navbar — solid after scrolling past a threshold
      ------------------------------------------------------------------ */
   function initNavbar() {
@@ -50,17 +66,10 @@
     const solid = nav.classList.contains('navbar--solid');
     if (solid) return;
 
-    let ticking = false;
     function update() {
       nav.classList.toggle('is-scrolled', window.scrollY > 40);
-      ticking = false;
     }
-    window.addEventListener('scroll', function () {
-      if (!ticking) {
-        window.requestAnimationFrame(update);
-        ticking = true;
-      }
-    }, { passive: true });
+    onScroll(update);
     update();
   }
 
@@ -85,18 +94,53 @@
       );
     }
 
+    /* 抽屉属于高优先级交互动画：任何档位都要完整播完再摘 DOM 状态。
+       关闭分两步 —— 先加 is-closing 播收尾，播完才移除 is-open，
+       避免面板「啪」地消失、也避免收尾动画被打断留下残留。 */
+    let closing = false;
+
     function open() {
+      if (closing) return;
       lastFocused = document.activeElement;
+      if (window.HZMotion) window.HZMotion.destroyWithin(drawer);
+      drawer.classList.remove('is-closing');
       drawer.classList.add('is-open');
       document.body.style.overflow = 'hidden';
       const f = focusables();
       if (f.length) f[0].focus();
     }
 
-    function close() {
+    function finishClose() {
       drawer.classList.remove('is-open');
+      drawer.classList.remove('is-closing');
       document.body.style.overflow = '';
+      closing = false;
       if (lastFocused) lastFocused.focus();
+    }
+
+    function close() {
+      if (!drawer.classList.contains('is-open') || closing) return;
+      const M = window.HZMotion;
+      if (!M || M.reduced() || M.tier() === 'off') { finishClose(); return; }
+
+      closing = true;
+      drawer.classList.add('is-closing');
+
+      const panel = drawer.querySelector('.drawer__panel');
+      let done = false;
+      const finish = function () {
+        if (done) return;
+        done = true;
+        clearTimeout(timer);
+        if (panel) panel.removeEventListener('transitionend', onEnd);
+        finishClose();
+      };
+      const onEnd = function (e) {
+        if (panel && e.target !== panel) return;
+        finish();
+      };
+      const timer = setTimeout(finish, 460);
+      if (panel) panel.addEventListener('transitionend', onEnd);
     }
 
     openers.forEach(function (o) { o.addEventListener('click', open); });
@@ -105,7 +149,7 @@
     });
 
     document.addEventListener('keydown', function (e) {
-      if (!drawer.classList.contains('is-open')) return;
+      if (!drawer.classList.contains('is-open') || closing) return;
       if (e.key === 'Escape') { close(); return; }
       if (e.key !== 'Tab') return;
       const f = focusables();
@@ -129,62 +173,33 @@
   }
 
   /* ------------------------------------------------------------------
-     Scroll reveal
+     Scroll reveal — 观察者与交错逻辑统一放在 motion.js
      ------------------------------------------------------------------ */
   function initReveal() {
-    const targets = document.querySelectorAll('[data-reveal]');
-    if (!targets.length) return;
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (reduced || !('IntersectionObserver' in window)) {
-      targets.forEach(function (t) { t.classList.add('is-visible'); });
+    if (window.HZMotion && typeof window.HZMotion.reveal === 'function') {
+      window.HZMotion.reveal();
       return;
     }
-
-    const observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        const el = entry.target;
-        const delay = parseInt(el.getAttribute('data-reveal-delay') || '0', 10);
-        setTimeout(function () { el.classList.add('is-visible'); }, delay);
-        observer.unobserve(el);
-      });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
-
-    targets.forEach(function (t) { observer.observe(t); });
+    document.querySelectorAll('[data-reveal]').forEach(function (t) {
+      t.classList.add('is-visible');
+    });
   }
 
   /* ------------------------------------------------------------------
-     Toast
+     Toast — 实现统一收在 motion.js（HZMotion.toast）：
+     出入场曲线、同屏队列上限、销毁清理全站共用一套规范。
      ------------------------------------------------------------------ */
-  let toastStack = null;
-
   function toast(message, options) {
-    if (!toastStack) {
-      toastStack = document.createElement('div');
-      toastStack.className = 'toast-stack';
-      toastStack.setAttribute('role', 'status');
-      toastStack.setAttribute('aria-live', 'polite');
-      document.body.appendChild(toastStack);
+    if (window.HZMotion && typeof window.HZMotion.toast === 'function') {
+      return window.HZMotion.toast(message, options);
     }
-    const opts = options || {};
+    // motion.js 缺失时的极简兜底，保证功能不静默失效
     const el = document.createElement('div');
     el.className = 'toast';
-    if (opts.icon) {
-      const icon = document.createElement('span');
-      icon.setAttribute('aria-hidden', 'true');
-      icon.textContent = opts.icon;
-      el.appendChild(icon);
-    }
-    const span = document.createElement('span');
-    span.textContent = message;
-    el.appendChild(span);
-    toastStack.appendChild(el);
-
-    setTimeout(function () {
-      el.classList.add('is-leaving');
-      setTimeout(function () { el.remove(); }, 220);
-    }, opts.duration || 2400);
+    el.textContent = message;
+    document.body.appendChild(el);
+    setTimeout(function () { el.remove(); }, 2400);
+    return el;
   }
 
   /* ------------------------------------------------------------------
@@ -193,19 +208,14 @@
   function initToTop() {
     const btn = document.querySelector('.to-top');
     if (!btn) return;
-    let ticking = false;
     function update() {
       btn.classList.toggle('is-visible', window.scrollY > 700);
-      ticking = false;
     }
-    window.addEventListener('scroll', function () {
-      if (!ticking) {
-        window.requestAnimationFrame(update);
-        ticking = true;
-      }
-    }, { passive: true });
+    onScroll(update);
     btn.addEventListener('click', function () {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      const M = window.HZMotion;
+      const reduced = M && (M.reduced() || M.tier() === 'off');
+      window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
     });
     update();
   }
@@ -342,6 +352,9 @@
     function applyAll() {
       const items = document.querySelectorAll('[data-filter-item]');
       let entering = 0;
+      // 交错步长：低性能档位直接取消排队，一次到位
+      const M0 = window.HZMotion;
+      const step = (M0 && M0.tier() === 'low') ? 0 : 28;
 
       items.forEach(function (item) {
         const tags = (item.getAttribute('data-tags') || '')
@@ -370,12 +383,15 @@
         item.hidden = !visible;
         item.style.display = visible ? '' : 'none';
 
-        // 只在「由隐转显」时播放入场动画，并让同批出现的卡片依次错开
+        // 只在「由隐转显」时播放入场动画，并让同批出现的卡片依次错开。
+        // 走 HZMotion：重复触发只重置不叠加，播完自动摘类，低档位自动取消交错。
         if (visible && !wasVisible) {
-          item.style.animationDelay = (entering * 28) + 'ms';
-          item.classList.remove('is-filter-in');
-          void item.offsetWidth;
-          item.classList.add('is-filter-in');
+          const M = window.HZMotion;
+          if (M) {
+            M.enter(item, 'is-filter-in', { delay: entering * step, duration: 340 });
+          } else {
+            item.classList.add('is-filter-in');
+          }
           entering++;
         }
       });
@@ -700,10 +716,13 @@
         });
         const row = id ? document.getElementById(id) : null;
         if (row) {
-          row.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          row.style.transition = 'box-shadow 240ms ease';
-          row.style.boxShadow = 'var(--shadow-xl), 0 0 0 2px var(--border-brand)';
-          setTimeout(function () { row.style.boxShadow = ''; }, 1800);
+          const M = window.HZMotion;
+          if (M) {
+            M.scrollToEl(row, { block: 'center' });
+            M.once(row, 'is-targeted', 1800);   // 播完自动摘类，不留内联样式
+          } else {
+            row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
         } else {
           toast('该住宿暂无列表条目，请切换到列表模式查看', { icon: '📍' });
         }
@@ -726,6 +745,9 @@
       if (!trigger) return;
       e.preventDefault();
       const d = trigger.dataset;
+
+      // 换内容前先给旧内容里的动画收尾，避免残留动画挂在新 DOM 上
+      if (window.HZMotion) window.HZMotion.destroyWithin(mount);
 
       mount.innerHTML =
         '<div class="detail-drawer__hero">' +
@@ -759,10 +781,11 @@
           '</div></div>' +
         '</div>' +
         '<div class="detail-drawer__foot">' +
-          '<div class="price price--lg"><span class="price__currency">¥</span>' +
-          '<span class="price__value">' + (d.price || '—') + '</span>' +
-          '<span class="price__unit">/人</span></div>' +
-          '<button class="btn btn--primary" type="button" data-book="' + (d.title || '') + '">立即预约</button>' +
+          '<div class="detail-drawer__price">' +
+            '<div class="price price--lg"><span class="price__value">预约制</span></div>' +
+            '<p class="detail-drawer__suggest">建议价 ¥' + (d.price || '—') + '（由经营者实际定价）</p>' +
+          '</div>' +
+          '<button class="btn btn--primary" type="button" data-book="' + (d.title || '') + '">了解详情</button>' +
         '</div>';
 
       // Newly injected close buttons need wiring
@@ -772,11 +795,15 @@
       mount.querySelectorAll('[data-book]').forEach(function (b) {
         b.addEventListener('click', function () {
           ctrl.close();
-          toast('已记录你的预约意向：' + b.getAttribute('data-book'), { icon: '✓' });
+          toast('已记录你的关注：' + b.getAttribute('data-book') + '，可拨 2423085 了解开放情况', { icon: '✓' });
         });
       });
 
       ctrl.open();
+      const body = mount.querySelector('.detail-drawer__body');
+      if (body && window.HZMotion) {
+        window.HZMotion.once(body, 'm-fade-up', 420);
+      }
       const title = mount.querySelector('#detailTitle');
       if (title) title.focus();
     });
@@ -824,17 +851,28 @@
       });
     });
 
-    // Share
+    // Share —— 统一走 share.js：原生面板优先，不支持则复制链接
     document.querySelectorAll('[data-share]').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        const url = window.location.href;
-        if (navigator.share) {
-          navigator.share({ title: document.title, url: url }).catch(function () {});
-        } else if (navigator.clipboard) {
-          navigator.clipboard.writeText(url).then(function () {
-            toast('链接已复制到剪贴板', { icon: '🔗' });
-          }).catch(function () { toast('复制失败，请手动复制地址栏链接', { icon: '⚠' }); });
-        }
+        const S = window.HZShare;
+        const M = window.HZMotion;
+        if (!S) { toast('转发模块未加载', { icon: '⚠' }); return; }
+
+        if (M) M.busy(btn, true);
+        const settle = function () { if (M) M.busy(btn, false); };
+
+        const prefix = (window.HZ_SITE && window.HZ_SITE.share && window.HZ_SITE.share.textPrefix) || '';
+        S.share({
+          title: document.title,
+          text: prefix + '一篇黄磜镇的攻略',
+          url: window.location.href
+        }).then(function (res) {
+          settle();
+          if (res.cancelled) return;
+          if (res.channel === 'native') toast('已打开分享面板', { icon: '🚀' });
+          else if (res.channel === 'clipboard') toast('链接已复制，可粘贴分享', { icon: '🔗' });
+          else toast('分享失败，请手动复制地址栏链接', { icon: '⚠', variant: 'error' });
+        });
       });
     });
 
@@ -859,6 +897,8 @@
             '</div>';
           el.querySelector('.comment__text').textContent = value;
           list.insertBefore(el, list.firstChild);
+          const M = window.HZMotion;
+          if (M) M.enter(el, 'm-fade-up', { duration: 360 });   // 新评论入场
         }
         input.value = '';
         toast('评论已发布', { icon: '💬' });

@@ -501,6 +501,24 @@
   aspect-ratio: 4 / 3;
 }
 
+/* 调研记录标签 —— 卡片右上角，标明内容来自调研而非官方发布 */
+.attr-card__survey-tag {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  z-index: 3;
+  padding: 3px var(--space-2);
+  font-size: var(--text-2xs);
+  line-height: 1.2;
+  color: oklch(99% 0 0);
+  background: oklch(15% 0.02 75 / 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid oklch(99% 0 0 / 0.24);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
 .attr-card__overlay {
   position: absolute;
   inset: auto 0 0 0;
@@ -643,6 +661,175 @@
   .stay-row { grid-template-columns: 1fr; }
   .stay-row__media { min-height: 200px; aspect-ratio: 16 / 9; }
   .stay-row__body { padding: var(--space-5); }
+}
+
+/* ==========================================================================
+   INDEX · 高山好物（特产展示 + 自提指引，非电商）
+   ========================================================================== */
+.spec-list {
+  display: grid;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+  padding: 0;
+  list-style: none;
+}
+
+.spec-list li {
+  display: flex;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+}
+
+.spec-list__k {
+  flex: 0 0 auto;
+  color: var(--text-tertiary);
+}
+
+.spec-list__v {
+  color: var(--text-secondary);
+  font-weight: var(--weight-medium);
+}
+
+/* ==========================================================================
+   EXPERIENCES · 预约制价格与二维码占位
+   ========================================================================== */
+.exp-card__suggest {
+  margin-top: var(--space-2);
+  font-size: var(--text-2xs);
+  color: var(--text-tertiary);
+}
+
+.detail-drawer__price {
+  display: grid;
+  gap: 2px;
+}
+
+.detail-drawer__suggest {
+  font-size: var(--text-2xs);
+  color: var(--text-tertiary);
+}
+
+.qr-placeholder {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-5);
+  background: var(--surface-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.qr-placeholder__box {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 108px;
+  height: 108px;
+  background: var(--surface-raised);
+  border: 2px dashed var(--border-default);
+  border-radius: var(--radius-sm);
+}
+
+.qr-placeholder__hint {
+  font-size: var(--text-2xs);
+  color: var(--text-tertiary);
+}
+
+.qr-placeholder__title {
+  font-weight: var(--weight-semibold);
+  color: var(--text-strong);
+}
+
+.qr-placeholder__desc {
+  margin-top: var(--space-1);
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+}
+
+@media (max-width: 560px) {
+  .qr-placeholder {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+}
+
+/* ==========================================================================
+   STAYS · 住宿资源摸底表（调研记录）
+   ========================================================================== */
+.survey-block {
+  padding: var(--space-6);
+}
+
+.survey-block__head {
+  margin-bottom: var(--space-4);
+}
+
+.survey-block__title {
+  margin-bottom: var(--space-2);
+  font-size: var(--text-lg);
+}
+
+.survey-note {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  background: var(--surface-sunken);
+  border-left: 3px solid var(--border-brand);
+  border-radius: var(--radius-sm);
+}
+
+.survey-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.survey-table {
+  min-width: 760px;
+}
+
+.survey-table th,
+.survey-table td {
+  white-space: nowrap;
+}
+
+/* 备注列允许换行，避免整表被撑得过宽 */
+.survey-table td:last-child,
+.survey-table th:last-child {
+  white-space: normal;
+  min-width: 220px;
+  text-align: left;
+}
+
+.survey-table tfoot td {
+  font-weight: var(--weight-semibold);
+  color: var(--text-strong);
+  background: var(--surface-sunken);
+  border-top: 1px solid var(--border-default);
+}
+
+.survey-foot {
+  display: grid;
+  gap: var(--space-1);
+  margin: var(--space-4) 0 0;
+  padding-left: var(--space-5);
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+}
+
+.survey-tip {
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+@media (max-width: 640px) {
+  .survey-block {
+    padding: var(--space-4);
+  }
 }
 
 /* Map panel */
