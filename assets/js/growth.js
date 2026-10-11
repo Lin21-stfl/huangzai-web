@@ -182,41 +182,102 @@
   };
 
   /* ------------------------------------------------------------------
-     远程评论后端（可选）
+     远程评论后端（可选 · Twikoo）
      ------------------------------------------------------------------
      site.config.js 里 comment.provider 改成 'twikoo' 并填 envId 后，
      留言就跨设备可见了 —— 渲染层不用改一行代码。
 
-     设计上刻意做成「尽力而为」：远程拉不到（没配 / 没网 / 没备案）就
-     静默回落到本地 localStorage，页面永远能正常显示，不会白屏等接口。
+     与原生 Twikoo 评论框不同，本站留言板是自定义的（标签 / 私密 / 单条
+     转发链接 / 点赞）。为了把这些结构化字段原样跨设备保存，每条留言会被
+     打包成 base64(JSON) 存进 Twikoo 的评论内容里；读取时再解回本站对象，
+     从而保留 id（让转发深链稳定）、tag、私密标记等。
+
+     ⚠️ 私密留言绝不发往云端：只留本地，保证「私密留言不生成公开链接」。
+     ⚠️ 用固定 path 让六个页面的留言共用同一个池子，而不是每页各一份。
      ------------------------------------------------------------------ */
   var REMOTE_TIMEOUT = 6000;
 
+  /* 没真正填 envId（还是占位串）时，一律按「未配置」处理，避免白下载 SDK */
+  var COMMENT_PLACEHOLDER = /填入|YOUR_|TODO|xxx|envId|环境 ?ID/i;
+
+  /* 六个页面共用一个留言池：Twikoo 按 path 分桶，固定 path 才能跨页可见 */
+  var TW_PATH = '/huangzai-wish-board';
+  var HZWB_PREFIX = 'HZWB1::';
+
   function remoteEnabled() {
     var c = CFG.comment || {};
-    return c.provider === 'twikoo' && !!c.twikooEnvId &&
-      typeof window !== 'undefined' && typeof window.twikoo === 'function';
+    var envId = c.twikooEnvId || '';
+    var t = (typeof window !== 'undefined') ? window.twikoo : null;
+    return c.provider === 'twikoo' && !!envId && !COMMENT_PLACEHOLDER.test(envId) &&
+      !!t && (typeof t.getComments === 'function' || typeof t === 'function');
   }
 
-  /* Twikoo 记录 → 本站留言对象 */
-  function fromTwikoo(raw) {
-    var nick = raw.nick || '匿名旅人';
-    var text = String(raw.commentText || raw.comment || '').replace(/<[^>]+>/g, '');
-    var tagId = 'sakura';
-    for (var i = 0; i < TAGS.length; i++) {
-      if (text.indexOf(TAGS[i].label) >= 0) { tagId = TAGS[i].id; break; }
+  /* 把整条留言打包成可安全存进 Twikoo 的字符串（base64 避免 HTML 转义破坏 JSON） */
+  function packWish(w) {
+    try {
+      var obj = {
+        id: w.id,
+        tag: w.tag || '',
+        text: w.text || '',
+        extra: w.extra || '',
+        name: w.name || '',
+        at: w.at || Date.now(),
+        private: !!isPrivate(w)
+      };
+      var json = JSON.stringify(obj);
+      return HZWB_PREFIX + btoa(unescape(encodeURIComponent(json)));
+    } catch (e) {
+      /* 极端情况下退回纯文本，至少内容不丢 */
+      return w.text || '';
     }
-    return {
-      id: 'tw-' + raw.id,
-      tag: tagId,
-      text: tagOf(tagId).phrase,
-      extra: text !== tagOf(tagId).phrase ? text : '',
-      name: nick,
-      at: raw.created || Date.now(),
+  }
+
+  /* Twikoo 记录 → 本站留言对象（解析结构化包，解析失败则按纯文本兜底） */
+  function fromTwikoo(raw) {
+    var text = String(raw.commentText || raw.comment || '').replace(/<[^>]+>/g, '');
+    var id = 'tw-' + (raw.id || (Date.now() + '-' + Math.floor(Math.random() * 1000)));
+    var base = {
+      id: id,
+      tag: '',
+      text: text,
+      extra: '',
+      name: raw.nick || '匿名旅人',
+      at: raw.created ? Date.parse(raw.created) || Date.now() : Date.now(),
       likes: (raw.like || 0),
       reply: '',
-      remote: true
+      remote: true,
+      synced: true
     };
+    if (text.indexOf(HZWB_PREFIX) === 0) {
+      try {
+        var b64 = text.slice(HZWB_PREFIX.length);
+        var json = decodeURIComponent(escape(atob(b64)));
+        var o = JSON.parse(json);
+        base.id = o.id || base.id;
+        base.tag = o.tag || '';
+        base.text = o.text || base.text;
+        base.extra = o.extra || '';
+        base.name = o.name || base.name;
+        base.at = o.at || base.at;
+        base.private = !!o.private;
+      } catch (e) { /* 解析失败：保留纯文本兜底 */ }
+    }
+    return base;
+  }
+
+  /* 只在真正启用时才动态注入 Twikoo SDK（457KB，没配 / 占位是就不下载） */
+  function ensureTwikoo(cb) {
+    var c = CFG.comment || {};
+    var envId = c.twikooEnvId || '';
+    if (c.provider !== 'twikoo' || !envId || COMMENT_PLACEHOLDER.test(envId)) { cb(false); return; }
+    var t = (typeof window !== 'undefined') ? window.twikoo : null;
+    if (t && (typeof t.getComments === 'function' || typeof t === 'function')) { cb(true); return; }
+    var s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/twikoo@1.6.39/dist/twikoo.min.js';
+    s.async = true;
+    s.onload = function () { cb(true); };
+    s.onerror = function () { cb(false); };
+    document.head.appendChild(s);
   }
 
   var Remote = {
@@ -228,8 +289,8 @@
       try {
         window.twikoo.getComments({
           envId: CFG.comment.twikooEnvId,
-          path: location.pathname || '/',
-          pageSize: 50
+          path: TW_PATH,
+          pageSize: 100
         }).then(function (res) {
           var arr = (res && res.data) || [];
           finish(arr.length ? arr.map(fromTwikoo) : null);
@@ -238,14 +299,16 @@
     },
     post: function (wish, done) {
       if (!remoteEnabled()) { done(false); return; }
+      /* 私密留言永不离开本机 */
+      if (isPrivate(wish)) { done(false); return; }
       try {
         window.twikoo.comment({
           envId: CFG.comment.twikooEnvId,
-          path: location.pathname || '/',
+          path: TW_PATH,
           nick: wish.name || '黄磜旅人',
           mail: '',
           link: '',
-          content: wish.text + (wish.extra ? '｜' + wish.extra : '')
+          content: packWish(wish)
         }).then(function () { done(true); }).catch(function () { done(false); });
       } catch (e) { done(false); }
     }
@@ -505,7 +568,7 @@
      ====================================================================== */
 
   function wishCard(w, isReply) {
-    var tag = tagOf(w.tag);
+    var tag = w.tag ? tagOf(w.tag) : { emoji: '💬', label: '留言', phrase: '', crowd: 0, season: '' };
     var likedOn = liked().indexOf(w.id) >= 0;
 
     if (isReply) {
@@ -1062,27 +1125,38 @@
   }
 
   function boot() {
-    seedOnce();
     injectAnalytics();
 
     /* 一次访问 = 一次 PV */
     bump('visits', 1);
     bumpToday('visits', 1);
 
-    renderAll();
-
     /* 转发 / 删除 / 取消定位：全局委托一次，墙重渲染后不用重新绑定 */
     bindWishActions();
 
-    /* 深链 ?wish=<id>：定位 + 高亮 + 重写分享卡片 */
-    handleWishDeepLink();
-
-    /* 配了 Twikoo 就尝试拉取线上留言；拉不到就静默用本地的 */
-    Remote.load(function (remoteList) {
-      if (!remoteList || !remoteList.length) return;
-      saveWishes(mergeWishes(remoteList));
-      document.querySelectorAll('[data-growth="wall"]').forEach(renderWall);
-      if (PINNED_ID) focusWish(PINNED_ID);
+    /* 远程优先：配了 Twikoo 就动态注入 SDK 并拉取线上留言；否则纯本地。
+       两个分支都最终 renderAll + handleWishDeepLink，保证页面一定出内容，
+       且深链在「数据已就绪」之后再解析（否则 findWish 还查不到）。 */
+    ensureTwikoo(function (ok) {
+      if (ok) {
+        /* 远程模式：先清掉本地演示种子，避免和真实数据混在一起显示 */
+        saveWishes(wishes().filter(function (w) { return !(w.isSeed || w.seed); }));
+        Remote.load(function (remoteList) {
+          if (remoteList && remoteList.length) {
+            saveWishes(mergeWishes(remoteList));
+          } else if (!wishes().length) {
+            /* 远程空 + 本地也空 → 兜底演示种子，答辩现场不至于白板 */
+            seedOnce();
+          }
+          renderAll();
+          handleWishDeepLink();
+        });
+      } else {
+        /* 没配 / SDK 加载失败 → 静默回落本地；首次访问注入演示种子 */
+        seedOnce();
+        renderAll();
+        handleWishDeepLink();
+      }
     });
   }
 

@@ -52,16 +52,19 @@ window.HZ_SITE = {
      provider: 'twikoo' —— 跨设备可见的真实评论。需要：
                             1. 开通腾讯云开发（CloudBase），建一个环境
                             2. 部署 Twikoo（云函数版），拿到 envId
-                            3. 把 envId 填到下面，并在页面里引入 Twikoo SDK：
-                               <script src="https://cdn.jsdelivr.net/npm/twikoo@1.6.39/dist/twikoo.npm.min.js"></script>
+                            3. 把 envId 填到下面的 twikooEnvId（留空则自动回落本地，
+                               不下载任何 SDK）
                             4. 腾讯云开发控制台里开启「评论审核」，过滤广告
 
      Twikoo 走国内腾讯云，微信里能打开、手机上就能审 —— 比 Vercel 方案稳。
-     填好之后 growth.js 会自动切过去，渲染层一行都不用改。
+     填好之后 growth.js 会自动切过去并动态注入 SDK，渲染层一行都不用改。
+     浏览器 SDK 用的是 dist/twikoo.min.js（不是 twikoo.npm.min.js，那个是 ESM、
+     不会挂到 window.twikoo 上，会导致永远启用不了）。
      ------------------------------------------------------------------ */
   comment: {
-    provider: 'local',
-    twikooEnvId: ''
+    provider: 'twikoo',
+    // 腾讯云 CloudBase 环境 ID（tcb-xxxxxxxx）。留空 = 自动回落本地模式
+    twikooEnvId: '在此填入腾讯云 CloudBase 的 envId'
   },
 
   /* ------------------------------------------------------------------
