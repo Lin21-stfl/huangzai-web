@@ -31,12 +31,24 @@
   /* 上线前替换为真实域名 —— 微信分享卡片与 og:image 必须是绝对地址 */
   var SITE_ORIGIN = CFG.origin || 'https://lin21-stfl.github.io/huangzai-web/';
 
-  /* 线上累计基数：全部从 0 开始 —— 不预置任何虚构流量，
-     真实数据由百度统计（site.config.js 的 analytics.id）接入后回填 */
+  /* 线上展示初始基数（仅用于「让新站看起来有基础流量」，非真实统计；
+     真实数据由百度统计接入后回填）：
+       todayVisits          —— 今日访客的起始基数
+       todayComments/Shares —— 今日留言/分享的起始基数
+       totalVisits          —— 历史总浏览量（已有 X 人看过）起始基数，约一两千
+     ⚠️ 下方 SITE_ORIGIN / site.config.js 的 origin（站点网址）保持不变。 */
+  var STAT_BASE = {
+    todayVisits: 200,     // 今日访客起始基数
+    todayComments: 16,    // 今日留言起始基数（让数据条更自然，可改）
+    todayShares: 9,       // 今日分享起始基数（可改）
+    totalVisits: 1500     // 总浏览量起始基数（约 1000~2000，可改）
+  };
+
+  /* 本地真实累计的叠加项（每次访问/留言/分享 +1），从 0 开始 */
   var BASE = {
-    visits: 0,        // 从0开始真实累计
-    comments: 0,      // 从0开始真实累计
-    shares: 0         // 从0开始真实累计
+    visits: 0,
+    comments: 0,
+    shares: 0
   };
 
   /* 统计起点说明：展示在访问量数字下方 */
@@ -376,23 +388,23 @@
     return t;
   }
 
-  /* 对外展示口径：线上基数 + 本地累计 */
+  /* 对外展示口径：总浏览量起始基数 + 本地真实累计 */
   function totals() {
     var s = stats();
     return {
-      visits: BASE.visits + (s.visits || 0),
+      visits: STAT_BASE.totalVisits + (s.visits || 0),
       comments: BASE.comments + (s.comments || 0),
       shares: BASE.shares + (s.shares || 0)
     };
   }
 
-  /* 今日展示口径：只用本日本地真实增量，不再叠加伪随机基线 */
+  /* 今日展示口径：起始基数 + 本日本地真实增量 */
   function todayTotals() {
     var t = today();
     return {
-      visits: (t.visits || 0),
-      comments: (t.comments || 0),
-      shares: (t.shares || 0)
+      visits: STAT_BASE.todayVisits + (t.visits || 0),
+      comments: STAT_BASE.todayComments + (t.comments || 0),
+      shares: STAT_BASE.todayShares + (t.shares || 0)
     };
   }
 
